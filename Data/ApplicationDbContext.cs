@@ -12,10 +12,30 @@ namespace AspnetReact.Data
 {
     public class ApplicationDbContext : ApiAuthorizationDbContext<ApplicationUser>
     {
-        public ApplicationDbContext(
-            DbContextOptions options,
-            IOptions<OperationalStoreOptions> operationalStoreOptions) : base(options, operationalStoreOptions)
+        DbSet<Campaign> Campaigns { get; set; }
+        DbSet<CampaignImage> CampaignImages { get; set; }
+        DbSet<CampaignVideo> CampaignVideos { get; set; }
+        DbSet<CampaignTag> CampaignTags { get; set; }
+        DbSet<Category> Categories { get; set; }
+        DbSet<Comment> Comments { get; set; }
+
+
+        public ApplicationDbContext(DbContextOptions options, IOptions<OperationalStoreOptions> operationalStoreOptions) 
+            : base(options, operationalStoreOptions)
         {
+            //Database.EnsureDeleted();
+            //Database.EnsureCreated();
+
+            InitTestData();
+        }
+
+
+
+
+
+        private void InitTestData()
+        {
+            
         }
     }
 }

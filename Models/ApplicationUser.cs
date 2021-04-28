@@ -8,5 +8,11 @@ namespace AspnetReact.Models
 {
     public class ApplicationUser : IdentityUser
     {
+        [PersonalData]
+        public Uri Photo { get; set; }
+        [PersonalData]
+        public DateTime RegistrationDate { get; set; }
+        [PersonalData]
+        public DateTime LastActivityDate { get; set; }
     }
 }

@@ -6,29 +6,20 @@ using System.Threading.Tasks;
 
 namespace AspnetReact.Models
 {
-    public class Campaign
+    public class Comment
     {
         [Required]
         public int Id { get; set; }
         [Required]
         public DateTime CreatingDate { get; set; }
         [Required]
-        public string Name { get; set; }
-        [Required]
         public string Body { get; set; }
-        [Required]
-        public float NeededSum { get; set; }
 
         [Required]
-        public int CategoryId { get; set; }
-        public Category Category { get; set; }
+        public int CampaignId { get; set; }
+        public Campaign Campaign { get; set; }
         [Required]
         public int CreatorId { get; set; }
         public ApplicationUser Creator { get; set; }
-
-        public List<CampaignTag> Tags { get; set; }
-        public List<Comment> Comments { get; set; }
-        public List<CampaignImage> Images { get; set; }
-        public List<CampaignVideo> Videos { get; set; }
     }
 }
