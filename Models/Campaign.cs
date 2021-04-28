@@ -26,9 +26,9 @@ namespace AspnetReact.Models
         public int CreatorId { get; set; }
         public ApplicationUser Creator { get; set; }
 
-        public List<CampaignTag> Tags { get; set; }
-        public List<Comment> Comments { get; set; }
         public List<CampaignImage> Images { get; set; }
         public List<CampaignVideo> Videos { get; set; }
+        public List<CampaignTag> Tags { get; set; }
+        public List<Comment> Comments { get; set; }
     }
 }
