@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31205.134
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AspnetReact", "AspnetReact.csproj", "{24DBB9FA-4595-4848-AB24-82ECA52E5B1C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AspnetReact", "AspnetReact\AspnetReact.csproj", "{817E238F-910B-4E0C-B792-2AC76415A9DF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,10 +11,10 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{24DBB9FA-4595-4848-AB24-82ECA52E5B1C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{24DBB9FA-4595-4848-AB24-82ECA52E5B1C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{24DBB9FA-4595-4848-AB24-82ECA52E5B1C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{24DBB9FA-4595-4848-AB24-82ECA52E5B1C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{817E238F-910B-4E0C-B792-2AC76415A9DF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{817E238F-910B-4E0C-B792-2AC76415A9DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{817E238F-910B-4E0C-B792-2AC76415A9DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{817E238F-910B-4E0C-B792-2AC76415A9DF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
