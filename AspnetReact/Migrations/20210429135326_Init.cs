@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace AspnetReact.Migrations
 {
-    public partial class InitModelsMigration : Migration
+    public partial class Init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -230,25 +230,18 @@ namespace AspnetReact.Migrations
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Body = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     NeededSum = table.Column<float>(type: "real", nullable: false),
-                    CategoryId = table.Column<int>(type: "int", nullable: false),
-                    CreatorId = table.Column<int>(type: "int", nullable: false),
-                    CreatorId1 = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                    FK_Campaign_Category_Id = table.Column<int>(type: "int", nullable: true),
+                    CreatorId = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Campaigns", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Campaigns_AspNetUsers_CreatorId1",
-                        column: x => x.CreatorId1,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Campaigns_Categories_CategoryId",
-                        column: x => x.CategoryId,
+                        name: "FK_Campaigns_Categories_FK_Campaign_Category_Id",
+                        column: x => x.FK_Campaign_Category_Id,
                         principalTable: "Categories",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -282,18 +275,18 @@ namespace AspnetReact.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Url = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CampaignId = table.Column<int>(type: "int", nullable: false),
+                    FK_CampaignMedia_Campaign_Id = table.Column<int>(type: "int", nullable: true),
                     DisplayPriority = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_CampaignImages", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_CampaignImages_Campaigns_CampaignId",
-                        column: x => x.CampaignId,
+                        name: "FK_CampaignImages_Campaigns_FK_CampaignMedia_Campaign_Id",
+                        column: x => x.FK_CampaignMedia_Campaign_Id,
                         principalTable: "Campaigns",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -303,18 +296,18 @@ namespace AspnetReact.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Url = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CampaignId = table.Column<int>(type: "int", nullable: false),
+                    FK_CampaignMedia_Campaign_Id = table.Column<int>(type: "int", nullable: true),
                     DisplayPriority = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_CampaignVideos", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_CampaignVideos_Campaigns_CampaignId",
-                        column: x => x.CampaignId,
+                        name: "FK_CampaignVideos_Campaigns_FK_CampaignMedia_Campaign_Id",
+                        column: x => x.FK_CampaignMedia_Campaign_Id,
                         principalTable: "Campaigns",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -325,25 +318,18 @@ namespace AspnetReact.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     CreatingDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Body = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CampaignId = table.Column<int>(type: "int", nullable: false),
-                    CreatorId = table.Column<int>(type: "int", nullable: false),
-                    CreatorId1 = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                    FK_Comment_Campaign_Id = table.Column<int>(type: "int", nullable: true),
+                    CreatorId = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Comments", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Comments_AspNetUsers_CreatorId1",
-                        column: x => x.CreatorId1,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Comments_Campaigns_CampaignId",
-                        column: x => x.CampaignId,
+                        name: "FK_Comments_Campaigns_FK_Comment_Campaign_Id",
+                        column: x => x.FK_Comment_Campaign_Id,
                         principalTable: "Campaigns",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
@@ -391,34 +377,24 @@ namespace AspnetReact.Migrations
                 column: "TagsId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_CampaignImages_CampaignId",
+                name: "IX_CampaignImages_FK_CampaignMedia_Campaign_Id",
                 table: "CampaignImages",
-                column: "CampaignId");
+                column: "FK_CampaignMedia_Campaign_Id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Campaigns_CategoryId",
+                name: "IX_Campaigns_FK_Campaign_Category_Id",
                 table: "Campaigns",
-                column: "CategoryId");
+                column: "FK_Campaign_Category_Id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Campaigns_CreatorId1",
-                table: "Campaigns",
-                column: "CreatorId1");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_CampaignVideos_CampaignId",
+                name: "IX_CampaignVideos_FK_CampaignMedia_Campaign_Id",
                 table: "CampaignVideos",
-                column: "CampaignId");
+                column: "FK_CampaignMedia_Campaign_Id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Comments_CampaignId",
+                name: "IX_Comments_FK_Comment_Campaign_Id",
                 table: "Comments",
-                column: "CampaignId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Comments_CreatorId1",
-                table: "Comments",
-                column: "CreatorId1");
+                column: "FK_Comment_Campaign_Id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_DeviceCodes_DeviceCode",
@@ -486,13 +462,13 @@ namespace AspnetReact.Migrations
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
+                name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
                 name: "CampaignTags");
 
             migrationBuilder.DropTable(
                 name: "Campaigns");
-
-            migrationBuilder.DropTable(
-                name: "AspNetUsers");
 
             migrationBuilder.DropTable(
                 name: "Categories");

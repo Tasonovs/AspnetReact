@@ -104,17 +104,15 @@ namespace AspnetReact.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("CategoryId")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("CreatingDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("CreatorId")
-                        .HasColumnType("int");
+                    b.Property<string>("CreatorId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("CreatorId1")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int?>("FK_Campaign_Category_Id")
+                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -125,9 +123,7 @@ namespace AspnetReact.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CategoryId");
-
-                    b.HasIndex("CreatorId1");
+                    b.HasIndex("FK_Campaign_Category_Id");
 
                     b.ToTable("Campaigns");
                 });
@@ -139,10 +135,10 @@ namespace AspnetReact.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("CampaignId")
+                    b.Property<int>("DisplayPriority")
                         .HasColumnType("int");
 
-                    b.Property<int>("DisplayPriority")
+                    b.Property<int?>("FK_CampaignMedia_Campaign_Id")
                         .HasColumnType("int");
 
                     b.Property<string>("Url")
@@ -151,7 +147,7 @@ namespace AspnetReact.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CampaignId");
+                    b.HasIndex("FK_CampaignMedia_Campaign_Id");
 
                     b.ToTable("CampaignImages");
                 });
@@ -179,10 +175,10 @@ namespace AspnetReact.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("CampaignId")
+                    b.Property<int>("DisplayPriority")
                         .HasColumnType("int");
 
-                    b.Property<int>("DisplayPriority")
+                    b.Property<int?>("FK_CampaignMedia_Campaign_Id")
                         .HasColumnType("int");
 
                     b.Property<string>("Url")
@@ -191,7 +187,7 @@ namespace AspnetReact.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CampaignId");
+                    b.HasIndex("FK_CampaignMedia_Campaign_Id");
 
                     b.ToTable("CampaignVideos");
                 });
@@ -223,23 +219,19 @@ namespace AspnetReact.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("CampaignId")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("CreatingDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("CreatorId")
-                        .HasColumnType("int");
+                    b.Property<string>("CreatorId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("CreatorId1")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int?>("FK_Comment_Campaign_Id")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CampaignId");
-
-                    b.HasIndex("CreatorId1");
+                    b.HasIndex("FK_Comment_Campaign_Id");
 
                     b.ToTable("Comments");
                 });
@@ -501,26 +493,16 @@ namespace AspnetReact.Migrations
                 {
                     b.HasOne("AspnetReact.Models.Category", "Category")
                         .WithMany()
-                        .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("AspnetReact.Models.ApplicationUser", "Creator")
-                        .WithMany()
-                        .HasForeignKey("CreatorId1");
+                        .HasForeignKey("FK_Campaign_Category_Id");
 
                     b.Navigation("Category");
-
-                    b.Navigation("Creator");
                 });
 
             modelBuilder.Entity("AspnetReact.Models.CampaignImage", b =>
                 {
                     b.HasOne("AspnetReact.Models.Campaign", "Campaign")
                         .WithMany("Images")
-                        .HasForeignKey("CampaignId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("FK_CampaignMedia_Campaign_Id");
 
                     b.Navigation("Campaign");
                 });
@@ -529,9 +511,7 @@ namespace AspnetReact.Migrations
                 {
                     b.HasOne("AspnetReact.Models.Campaign", "Campaign")
                         .WithMany("Videos")
-                        .HasForeignKey("CampaignId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("FK_CampaignMedia_Campaign_Id");
 
                     b.Navigation("Campaign");
                 });
@@ -540,17 +520,9 @@ namespace AspnetReact.Migrations
                 {
                     b.HasOne("AspnetReact.Models.Campaign", "Campaign")
                         .WithMany("Comments")
-                        .HasForeignKey("CampaignId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("AspnetReact.Models.ApplicationUser", "Creator")
-                        .WithMany()
-                        .HasForeignKey("CreatorId1");
+                        .HasForeignKey("FK_Comment_Campaign_Id");
 
                     b.Navigation("Campaign");
-
-                    b.Navigation("Creator");
                 });
 
             modelBuilder.Entity("CampaignCampaignTag", b =>

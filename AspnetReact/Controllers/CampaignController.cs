@@ -6,11 +6,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using AspnetReact.Data;
 using AspnetReact.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace AspnetReact.Controllers
 {
 	[ApiController]
-	[Route("api/campaigns")]
+	[Route("api/[controller]")]
 	public class CampaignController : Controller
 	{
 		ApplicationDbContext db;
@@ -22,13 +23,20 @@ namespace AspnetReact.Controllers
 		[HttpGet]
 		public IEnumerable<Campaign> ReadAll()
 		{
-			return db.Campaigns.ToList();
+			return db.Campaigns
+				.Include(x => x.Category)
+				.Include(x => x.Tags)
+				.ToList();
 		}
 
 		[HttpGet("{id}")]
 		public Campaign Read(int id)
 		{
-			Campaign foundedItem = db.Campaigns.FirstOrDefault(x => x.Id == id);
+			Campaign foundedItem = db.Campaigns
+				.Include(x => x.Category)
+				.Include(x => x.Tags)
+				.FirstOrDefault(x => x.Id == id);
+;
 			return foundedItem;
 		}
 

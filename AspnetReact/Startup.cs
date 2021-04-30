@@ -11,6 +11,8 @@ using AspnetReact.Models;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Newtonsoft.Json;
+using Microsoft.AspNetCore.Http;
 
 namespace AspnetReact
 {
@@ -41,7 +43,11 @@ namespace AspnetReact
             services.AddAuthentication()
                 .AddIdentityServerJwt();
 
-            services.AddControllersWithViews();
+			services.AddControllersWithViews().AddNewtonsoftJson(
+                options => {
+                    options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+                    
+                });
             services.AddRazorPages();
 
             // In production, the React files will be served from this directory
@@ -57,7 +63,7 @@ namespace AspnetReact
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                //app.UseMigrationsEndPoint();
+                app.UseMigrationsEndPoint();
             }
             else
             {
@@ -94,5 +100,7 @@ namespace AspnetReact
                 }
             });
         }
+
+
     }
 }

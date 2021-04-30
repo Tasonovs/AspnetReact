@@ -7,6 +7,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc;
+using AspnetReact.Controllers;
+using Microsoft.AspNetCore.Owin;
+using AspnetReact;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace AspnetReact.Data
 {
@@ -19,21 +27,35 @@ namespace AspnetReact.Data
         public DbSet<Category> Categories { get; set; }
         public DbSet<Comment> Comments { get; set; }
 
-
-        public ApplicationDbContext(DbContextOptions options, IOptions<OperationalStoreOptions> operationalStoreOptions) 
+		//private readonly UserManager<ApplicationUser> userManager;
+		//private readonly SignInManager<ApplicationUser> signInManager;
+		public ApplicationDbContext(DbContextOptions options, IOptions<OperationalStoreOptions> operationalStoreOptions) 
             : base(options, operationalStoreOptions)
-        {
-            //Database.EnsureDeleted();
-            //Database.EnsureCreated();
-            InitTestData();
-        }
-
+		{
+			//Database.EnsureDeleted();
+			//Database.EnsureCreated();
+			InitTestData();
+		}
 
 
 
 
         private void InitTestData()
         {
+            //if (!Users.Any())
+            //{
+            //    for (int i = 1; i < 10; i++)
+            //    {
+            //        string userEmail = $"User{i}@mail.com";
+            //        await userManager.CreateAsync(new ApplicationUser()
+            //        {
+            //            Email = userEmail,
+            //            UserName = userEmail,
+            //            EmailConfirmed = true,
+            //        }, userEmail);
+            //    }
+            //    SaveChanges();
+            //}
             if (!Categories.Any())
             {
                 Categories.Add(new Category() { Name = "Games" });
@@ -63,7 +85,7 @@ namespace AspnetReact.Data
                     CreatingDate = DateTime.Now.AddDays(-1.5f),
                     NeededSum = 1500.0f,
 
-                    Creator = Users.FirstOrDefault(x => x.Email == "User1@mail.com"),
+                    CreatorId = Users.FirstOrDefault(x => x.Email == "User1@mail.com").Id,
                     Category = Categories.FirstOrDefault(x => x.Name == "Games"),
                     Tags = new List<CampaignTag>()
                     {
@@ -74,11 +96,11 @@ namespace AspnetReact.Data
                 var _c2 = new Campaign()
                 {
                     Name = "RPG Campaign",
-                    Body = "Lorem ipsum .... description",
+                    Body = "Lorem ipsum ... description",
                     CreatingDate = DateTime.Now.AddDays(-0.5f),
                     NeededSum = 2000.0f,
 
-                    Creator = Users.FirstOrDefault(x => x.Email == "User1@mail.com"),
+                    CreatorId = Users.FirstOrDefault(x => x.Email == "User1@mail.com").Id,
                     Category = Categories.FirstOrDefault(x => x.Name == "Games"),
                     Tags = new List<CampaignTag>()
                     {
@@ -94,9 +116,10 @@ namespace AspnetReact.Data
             }
             if (!Comments.Any())
             {
-                Comments.Add(new Comment() {
+                Comments.Add(new Comment()
+                {
                     Campaign = Campaigns.FirstOrDefault(x => x.Name == "Shooter Campaign"),
-                    Creator = Users.FirstOrDefault(x => x.Email == "User1@mail.com"),
+                    CreatorId = Users.FirstOrDefault(x => x.Email == "User1@mail.com").Id,
                     CreatingDate = DateTime.Now,
                     Body = "It's amazing. My comment)))"
                 });
