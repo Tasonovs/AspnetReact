@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -16,16 +17,18 @@ namespace AspnetReact.Models
         [Required]
         public string Name { get; set; }
         [Required]
-        public string Body { get; set; }
+        public string Description { get; set; }
         [Required]
         public float NeededSum { get; set; }
 
-        //[Required]
-        //public int CategoryId { get; set; }
-        [ForeignKey("FK_Campaign_Category_Id")]
-        public Category Category { get; set; }
+		[Required]
+        //[JsonIgnore]
+        public int CategoryId { get; set; }
+		public Category Category { get; set; }
         [Required]
         public string CreatorId { get; set; }
+        [JsonIgnore]
+        public ApplicationUser Creator { get; set; }
 
         public List<CampaignImage> Images { get; set; }
         public List<CampaignVideo> Videos { get; set; }

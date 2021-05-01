@@ -7,19 +7,26 @@ using System.Threading.Tasks;
 using AspnetReact.Data;
 using AspnetReact.Models;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 
 namespace AspnetReact.Controllers
 {
+	[Authorize]
 	[ApiController]
 	[Route("api/[controller]")]
 	public class CampaignController : Controller
 	{
 		ApplicationDbContext db;
-		public CampaignController(ApplicationDbContext context)
+		private readonly UserManager<ApplicationUser> userManager;
+		public CampaignController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
 		{
-			db = context;
+			this.userManager = userManager;
+			this.db = context;
 		}
 
+		[AllowAnonymous]
 		[HttpGet]
 		public IEnumerable<Campaign> ReadAll()
 		{
@@ -29,6 +36,7 @@ namespace AspnetReact.Controllers
 				.ToList();
 		}
 
+		[AllowAnonymous]
 		[HttpGet("{id}")]
 		public Campaign Read(int id)
 		{
@@ -41,15 +49,14 @@ namespace AspnetReact.Controllers
 		}
 
 		[HttpPost]
-		public IActionResult Create(Campaign obj)
+		public JsonResult Create(Campaign obj)
 		{
-			if (ModelState.IsValid)
-			{
-				db.Campaigns.Add(obj);
-				db.SaveChanges();
-				return Ok(obj);
-			}
-			return BadRequest(ModelState);
+			if (!ModelState.IsValid)
+				return new JsonResult(obj) { StatusCode = StatusCodes.Status400BadRequest };
+			
+			db.Campaigns.Add(obj);
+			db.SaveChanges();
+			return new JsonResult(obj) { StatusCode = StatusCodes.Status200OK };
 		}
 
 		[HttpPut]

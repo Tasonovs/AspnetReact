@@ -13,6 +13,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json;
 using Microsoft.AspNetCore.Http;
+using System.Security.Claims;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Microsoft.Extensions.Options;
 
 namespace AspnetReact
 {
@@ -43,7 +47,7 @@ namespace AspnetReact
             services.AddAuthentication()
                 .AddIdentityServerJwt();
 
-			services.AddControllersWithViews().AddNewtonsoftJson(
+            services.AddControllersWithViews().AddNewtonsoftJson(
                 options => {
                     options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
                     
@@ -100,7 +104,28 @@ namespace AspnetReact
                 }
             });
         }
+    }
 
+    public class AdditionalUserClaimsPrincipalFactory
+        : UserClaimsPrincipalFactory<ApplicationUser, IdentityRole>
+    {
+        public AdditionalUserClaimsPrincipalFactory(
+            UserManager<ApplicationUser> userManager,
+            RoleManager<IdentityRole> roleManager,
+            IOptions<IdentityOptions> optionsAccessor)
+            : base(userManager, roleManager, optionsAccessor)
+        { }
 
+        public async override Task<ClaimsPrincipal> CreateAsync(ApplicationUser user)
+        {
+            var principal = await base.CreateAsync(user);
+            var identity = (ClaimsIdentity)principal.Identity;
+
+            var claims = new List<Claim>();
+            claims.Add(new Claim(ClaimTypes.Email, user.Email));
+
+            identity.AddClaims(claims);
+            return principal;
+        }
     }
 }

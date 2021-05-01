@@ -8,8 +8,8 @@ import { ApplicationPaths } from './components/api-authorization/ApiAuthorizatio
 import './custom.css'
 import { Home } from './components/Home';
 import { FetchData } from './components/FetchData';
-import { AllCampaignsPage } from './components/campaigns/CampaignsReadAll';
-import { CampaignPage } from './components/campaigns/CampaignReadById';
+import * as Campaign from './components/campaigns/';
+
 
 export default class App extends Component {
   static displayName = App.name;
@@ -19,8 +19,9 @@ export default class App extends Component {
       <Layout>
         <Route exact path='/' component={Home} />
 
-        <Route path='/campaigns' component={AllCampaignsPage} />
-        <Route path="/campaign/:id" component={CampaignPage}/>
+        <Route path='/campaigns' component={Campaign.ReadAllPage} />
+        <Route path="/campaign/read/:id" component={Campaign.ReadPage}/>
+        <AuthorizeRoute path="/campaign/create" component={Campaign.CreatePage}/>
         
         <AuthorizeRoute path='/fetch-data' component={FetchData} />
         <Route path={ApplicationPaths.ApiAuthorizationPrefix} component={ApiAuthorizationRoutes} />

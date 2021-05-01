@@ -1,5 +1,5 @@
 import React from 'react';
-import "./Campaign.css"
+import "./style.css"
 
 export default function CampaignCard(props) {
     let maxTextLength = 60;
@@ -9,18 +9,18 @@ export default function CampaignCard(props) {
             <img className="card-img-top card-image" src={"https://picsum.photos/id/" + random + "/300"} alt="Card img" />
             <div className="card-body">
                 <h5 className="card-title mb-1">
-                    <a href={"/campaign/" + props.campaign.id}>{props.campaign.name}</a>
+                    <a href={"/campaign/read/" + props.campaign.id}>{props.campaign.name}</a>
                 </h5>
 
                 <span className="badge badge-secondary mr-1">{props.campaign.category.name}</span>
-                {props.campaign.tags.length &&
+                {props.campaign.tags &&
                     props.campaign.tags.map(tag => (<span key={tag.id} className="badge badge-secondary mr-1">{tag.name}</span>))}
 
-                {props.campaign.body.length <= maxTextLength &&
-                    <p className="card-text">{props.campaign.body}</p>
+                {props.campaign.description.length <= maxTextLength &&
+                    <p className="card-text">{props.campaign.description}</p>
                 }
-                {props.campaign.body.length > maxTextLength &&
-                    <p className="card-text">{props.campaign.body.substring(0, maxTextLength)}{'...'}</p>
+                {props.campaign.description.length > maxTextLength &&
+                    <p className="card-text">{props.campaign.description.substring(0, maxTextLength)}{'...'}</p>
                 }
             </div>
             <div className="card-footer">
@@ -62,29 +62,27 @@ function time_ago(time) {
         // [5806080000, 'Last century', 'Next century'], // 60*60*24*7*4*12*100*2
         // [58060800000, 'centuries', 2903040000] // 60*60*24*7*4*12*100*20, 60*60*24*7*4*12*100
     ];
-    var seconds = (+new Date() - time) / 1000,
-        token = 'ago',
-        list_choice = 1;
-
     let max_seconds = time_formats[time_formats.length-1][0];
+    var seconds = (+new Date() - time) / 1000, token = 'ago', list_choice = 1;
+
     if (seconds >= max_seconds) return new Date(time).toLocaleDateString();
 
-    if (seconds === 0) {
-        return 'Just now'
-    }
+    if (seconds === 0) return 'Just now'
+
     if (seconds < 0) {
         seconds = Math.abs(seconds);
         token = 'from now';
         list_choice = 2;
     }
-    var i = 0,
-        format;
-    while (format = time_formats[i++])
+
+    var i = 0, format;
+    while (true) {
+        format = time_formats[i++]
         if (seconds < format[0]) {
             if (typeof format[2] == 'string')
                 return format[list_choice];
             else
                 return Math.floor(seconds / format[2]) + ' ' + format[1] + ' ' + token;
         }
-    return time;
+    }
 }

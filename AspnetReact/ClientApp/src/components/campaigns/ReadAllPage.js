@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import CampaignCard from "./CampaignCard"
 
-export function AllCampaignsPage() {
+export default function ReadAllPage() {
     const [error, setError] = useState(null);
     const [isLoaded, setIsLoaded] = useState(false);
     const [items, setItems] = useState([]);
@@ -21,7 +21,8 @@ export function AllCampaignsPage() {
     else {
         return (
             <div className="d-flex flex-column justify-content-center align-items-center">
-                <h1 className="mb-3">Campaigns</h1>
+                <h1 className="mb-3">Campaigns <a href="/campaign/create">(add)</a></h1>
+
                 <div className="d-flex justify-content-center align-items-stretch flex-wrap">
                     {items.map(item => (
                         <CampaignCard key={item.id} campaign={item} />

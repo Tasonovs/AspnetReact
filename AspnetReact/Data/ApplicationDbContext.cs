@@ -81,7 +81,7 @@ namespace AspnetReact.Data
                 var _c1 = new Campaign()
                 {
                     Name = "Shooter Campaign",
-                    Body = "Lorem ipsum .... description",
+                    Description = "Lorem ipsum .... description",
                     CreatingDate = DateTime.Now.AddDays(-1.5f),
                     NeededSum = 1500.0f,
 
@@ -96,7 +96,7 @@ namespace AspnetReact.Data
                 var _c2 = new Campaign()
                 {
                     Name = "RPG Campaign",
-                    Body = "Lorem ipsum ... description",
+                    Description = "Lorem ipsum ... description",
                     CreatingDate = DateTime.Now.AddDays(-0.5f),
                     NeededSum = 2000.0f,
 
