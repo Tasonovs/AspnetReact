@@ -3,6 +3,10 @@ import "./style.css"
 
 export default function CampaignCard(props) {
     let maxTextLength = 60;
+    //TODO вынести в отдельный метод
+    props.campaign.creatingDate = new Date(props.campaign.creatingDate);
+    props.campaign.creatingDate.setTime(props.campaign.creatingDate.getTime() - props.campaign.creatingDate.getTimezoneOffset()*60*1000);
+
     let random = Math.floor(Math.random() * 999);
     return (
         <div className="card m-1">

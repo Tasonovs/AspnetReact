@@ -53,7 +53,15 @@ namespace AspnetReact.Controllers
 		{
 			if (!ModelState.IsValid)
 				return new JsonResult(obj) { StatusCode = StatusCodes.Status400BadRequest };
-			
+
+			for (int i = 0; i < obj.Tags.Count; i++)
+			{
+				var foundTag = db.CampaignTags.FirstOrDefault(x => x.Name == obj.Tags[i].Name);
+				if (foundTag == null) foundTag = db.CampaignTags.Add(new CampaignTag() { Name = obj.Tags[i].Name }).Entity;
+				obj.Tags[i] = foundTag;
+				//obj.Tags[i] = db.CampaignTags.FindAndAddIfNotExists(obj.Tags[i], x => x.Name);
+			}
+
 			db.Campaigns.Add(obj);
 			db.SaveChanges();
 			return new JsonResult(obj) { StatusCode = StatusCodes.Status200OK };

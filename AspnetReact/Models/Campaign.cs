@@ -22,9 +22,9 @@ namespace AspnetReact.Models
         public float NeededSum { get; set; }
 
 		[Required]
-        //[JsonIgnore]
         public int CategoryId { get; set; }
 		public Category Category { get; set; }
+
         [Required]
         public string CreatorId { get; set; }
         [JsonIgnore]
