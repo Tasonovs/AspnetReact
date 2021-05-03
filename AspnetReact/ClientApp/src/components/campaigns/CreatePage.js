@@ -1,45 +1,30 @@
 import React, { useEffect, useState } from 'react'
 import authService from '../api-authorization/AuthorizeService'
+import * as Api from "../api-controller/Requests"
 import { useForm, Controller } from "react-hook-form";
 import Select from 'react-select'
 import CreatableSelect from 'react-select/creatable';
+import CenteredModal from '../common/CenteredModal'
 
 export default function CreatePage() {
   const { register, handleSubmit, formState: { errors }, control } = useForm();
 
   const [dbCategories, setDbCategories] = useState([]);
   const [dbTags, setDbTags] = useState([]);
+  const [modalShow, setModalShow] = useState(false);
+
   useEffect(() => {
-    async function fetchData() {
-      await fetch("/api/category").then(res => res.json())
-        .then((result) => { setDbCategories(result) }, (error) => { console.log(error) });
-      await fetch("/api/tag").then(res => res.json())
-        .then((result) => { setDbTags(result) }, (error) => { console.log(error) });
-    }
-    fetchData();
+    Api.getDataWithHook(Api.Routes.Category, setDbCategories);
+    Api.getDataWithHook(Api.Routes.Tag, setDbTags);
   }, [])
 
   const onSubmit = async (data) => {
-    const token = await authService.getAccessToken();
-    const user = await authService.getUser();
     data.creatingDate = new Date();
-    data.creatorId = user.sub;
-    let dataString = JSON.stringify(data);
-
-    fetch('/api/campaign', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Content-Length': dataString.length,
-        'Credentials': 'same-origin',
-        'Authorization': `Bearer ${token.toString()}`
-      },
-      body: dataString
-    }).then((res) => res.json())
-    .then(
-      (result) => {alert("Successful created")},
-      (error) => {alert("Something went wrong, please try later")}
-    )
+    Api.authorizedPost(Api.Routes.Campaign, data)
+      .then(
+        (result) => { setModalShow(true) },
+        (error) => { alert("Something went wrong, please try later") }
+      )
   }
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -73,7 +58,7 @@ export default function CreatePage() {
           render={({ field: { onChange } }) => (
             <CreatableSelect isMulti isClearable
               options={dbTags.map((t) => { return { value: t.id, label: t.name } })}
-              onChange={val => onChange(val?.map(e => { return { name: e.label }}))} //, name: e.label
+              onChange={val => onChange(val?.map(e => { return { name: e.label } }))} //, name: e.label
             />
           )}
         />
@@ -86,19 +71,8 @@ export default function CreatePage() {
       </div>
 
       <input type="submit" className="btn btn-primary" value="Send" />
+      <CenteredModal show={modalShow} onHide={() => setModalShow(false)} backdrop="static" keyboard={false}
+        title="Great" body="The campaign was successfully created" />
     </form>
   );
 }
-
-
-
-//TODO
-// function Input({ tag, type, name, errorsDotName }) {
-//   return (
-//     <div className="form-group">
-//       <label className="form-label">Project name</label>
-//       <input {...register("name", { required: true })} placeholder="Project name" type="text" className="form-control" />
-//       {errors.name && <small className="form-text text-danger">Field is invalid</small>}
-//     </div>
-//   )
-// }
