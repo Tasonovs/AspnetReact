@@ -10,8 +10,8 @@ using System.Threading.Tasks;
 
 namespace AspnetReact.Controllers
 {
-	[Route("api/[controller]")]
 	[ApiController]
+	[Route("api/uploads")]
 	public class UploadController : Controller
 	{
 		[HttpPost]
@@ -19,16 +19,7 @@ namespace AspnetReact.Controllers
 		{
 			long size = images.Sum(f => f.Length);
 			foreach (var image in images)
-			{
 				await Upload(image);
-				//if (img.Length > 0)
-				//{
-				//	var filePath = Path.Combine(Directory.GetCurrentDirectory(), "Uploads",
-				//		Path.ChangeExtension(Path.GetRandomFileName(), Path.GetExtension(img.FileName)));
-				//	using (var stream = System.IO.File.Create(filePath))
-				//		await img.CopyToAsync(stream);
-				//}
-			}
 
 			return Ok(new { count = images.Count, size });
 		}
@@ -44,15 +35,15 @@ namespace AspnetReact.Controllers
 			return newFilename;
 		}
 
+		[HttpGet("{filename}")]
+		public IActionResult DownloadFile([FromRoute]string filename)
+		{
+			var filePath = Path.Combine(Directory.GetCurrentDirectory(), "Uploads", filename);
+			if (!System.IO.File.Exists(filePath)) return NotFound();
+			
+			return PhysicalFile(filePath, "image/"+ Path.GetExtension(filename).Remove(1,1), filename);
+		}
 
 
-
-	}
-
-	public class UploadViewModel
-	{
-		public string Name { get; set; }
-		public string Description { get; set; }
-		public List<string> TagNames { get; set; }
 	}
 }

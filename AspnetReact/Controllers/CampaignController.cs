@@ -32,6 +32,8 @@ namespace AspnetReact.Controllers
 			return db.Campaigns
 				.Include(x => x.Category)
 				.Include(x => x.Tags)
+				.Include(x => x.Images)
+				.Include(x => x.Videos)
 				.ToList();
 		}
 
@@ -42,6 +44,8 @@ namespace AspnetReact.Controllers
 			Campaign foundedItem = db.Campaigns
 				.Include(x => x.Category)
 				.Include(x => x.Tags)
+				.Include(x => x.Images)
+				.Include(x => x.Videos)
 				.FirstOrDefault(x => x.Id == id);
 
 			return foundedItem;

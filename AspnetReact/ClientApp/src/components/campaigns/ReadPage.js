@@ -31,7 +31,7 @@ export default function ReadPage(props) {
         return (
             <div className="d-flex flex-column justify-content-center align-items-center">
                 <h1>Campaign '{item.name}'</h1>
-                {isLoaded && (item.creatorId === user.sub) && <Button href={"/campaign/edit/"+props.match.params.id} >Edit</Button>}
+                {isLoaded && (item?.creatorId === user?.sub) && <Button href={"/campaign/edit/"+props.match.params.id} >Edit</Button>}
                 <div className="d-flex justify-content-center align-items-stretch flex-wrap">
                     <CampaignCard campaign={item} />
                 </div>

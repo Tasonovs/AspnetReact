@@ -3,14 +3,14 @@ import "./style.css"
 
 export default function CampaignCard(props) {
     let maxTextLength = 60;
-    //TODO вынести в отдельный метод
+    //TODO вынести в отдельный метод учёта GMT
     props.campaign.creatingDate = new Date(props.campaign.creatingDate);
     props.campaign.creatingDate.setTime(props.campaign.creatingDate.getTime() - props.campaign.creatingDate.getTimezoneOffset()*60*1000);
-
-    let random = Math.floor(Math.random() * 999);
     return (
         <div className="card m-1">
-            <img className="card-img-top card-image" src={"https://picsum.photos/id/" + random + "/300"} alt="Card img" />
+            <img className="card-img-top card-image" alt="Card img"
+                src={props.campaign.images.length ? "api/uploads/"+props.campaign.images[0].url : "api/uploads/default.png"} 
+            />
             <div className="card-body">
                 <h5 className="card-title mb-1">
                     <a href={"/campaign/read/" + props.campaign.id}>{props.campaign.name}</a>
@@ -62,9 +62,6 @@ function time_ago(time) {
         [4838400, 'Last month', 'Next month'], // 60*60*24*7*4*2
         // [29030400, 'months', 2419200], // 60*60*24*7*4*12, 60*60*24*7*4
         // [58060800, 'Last year', 'Next year'], // 60*60*24*7*4*12*2
-        // [2903040000, 'years', 29030400], // 60*60*24*7*4*12*100, 60*60*24*7*4*12
-        // [5806080000, 'Last century', 'Next century'], // 60*60*24*7*4*12*100*2
-        // [58060800000, 'centuries', 2903040000] // 60*60*24*7*4*12*100*20, 60*60*24*7*4*12*100
     ];
     let max_seconds = time_formats[time_formats.length-1][0];
     var seconds = (+new Date() - time) / 1000, token = 'ago', list_choice = 1;
