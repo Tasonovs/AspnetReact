@@ -21,9 +21,9 @@ namespace AspnetReact.Data
     public class ApplicationDbContext : ApiAuthorizationDbContext<ApplicationUser>
     {
         public DbSet<Campaign> Campaigns { get; set; }
-        public DbSet<CampaignImage> CampaignImages { get; set; }
-        public DbSet<CampaignVideo> CampaignVideos { get; set; }
-        public DbSet<CampaignTag> CampaignTags { get; set; }
+        public DbSet<Image> CampaignImages { get; set; }
+        public DbSet<Video> CampaignVideos { get; set; }
+        public DbSet<Tag> CampaignTags { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Comment> Comments { get; set; }
 
@@ -33,7 +33,7 @@ namespace AspnetReact.Data
             : base(options, operationalStoreOptions)
 		{
 			//Database.EnsureDeleted();
-			//Database.EnsureCreated();
+			Database.EnsureCreated();
 			InitTestData();
 		}
 
@@ -42,21 +42,8 @@ namespace AspnetReact.Data
 
         private void InitTestData()
         {
-            //if (!Users.Any())
-            //{
-            //    for (int i = 1; i < 10; i++)
-            //    {
-            //        string userEmail = $"User{i}@mail.com";
-            //        await userManager.CreateAsync(new ApplicationUser()
-            //        {
-            //            Email = userEmail,
-            //            UserName = userEmail,
-            //            EmailConfirmed = true,
-            //        }, userEmail);
-            //    }
-            //    SaveChanges();
-            //}
-            if (!Categories.Any())
+            if (!Users.Any()) return;
+			if (!Categories.Any())
             {
                 Categories.Add(new Category() { Name = "Games" });
                 Categories.Add(new Category() { Name = "Films" });
@@ -67,12 +54,12 @@ namespace AspnetReact.Data
             }
             if (!CampaignTags.Any())
             {
-                CampaignTags.Add(new CampaignTag() { Name = "Shooter" });
-                CampaignTags.Add(new CampaignTag() { Name = "RPG" });
-                CampaignTags.Add(new CampaignTag() { Name = "Comedy" });
-                CampaignTags.Add(new CampaignTag() { Name = "History" });
-                CampaignTags.Add(new CampaignTag() { Name = "3D" });
-                CampaignTags.Add(new CampaignTag() { Name = "2D" });
+                CampaignTags.Add(new Tag() { Name = "Shooter" });
+                CampaignTags.Add(new Tag() { Name = "RPG" });
+                CampaignTags.Add(new Tag() { Name = "Comedy" });
+                CampaignTags.Add(new Tag() { Name = "History" });
+                CampaignTags.Add(new Tag() { Name = "3D" });
+                CampaignTags.Add(new Tag() { Name = "2D" });
 
                 SaveChanges();
             }
@@ -87,7 +74,7 @@ namespace AspnetReact.Data
 
                     CreatorId = Users.FirstOrDefault(x => x.Email == "User1@mail.com").Id,
                     Category = Categories.FirstOrDefault(x => x.Name == "Games"),
-                    Tags = new List<CampaignTag>()
+                    Tags = new List<Tag>()
                     {
                         CampaignTags.FirstOrDefault(x => x.Name == "Shooter"),
                         CampaignTags.FirstOrDefault(x => x.Name == "3D")
@@ -102,7 +89,7 @@ namespace AspnetReact.Data
 
                     CreatorId = Users.FirstOrDefault(x => x.Email == "User1@mail.com").Id,
                     Category = Categories.FirstOrDefault(x => x.Name == "Games"),
-                    Tags = new List<CampaignTag>()
+                    Tags = new List<Tag>()
                     {
                         CampaignTags.FirstOrDefault(x => x.Name == "RPG"),
                         CampaignTags.FirstOrDefault(x => x.Name == "2D")

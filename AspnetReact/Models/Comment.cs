@@ -16,9 +16,7 @@ namespace AspnetReact.Models
         [Required]
         public string Body { get; set; }
 
-		//[Required]
-		//public int CampaignId { get; set; }
-		[ForeignKey("FK_Comment_Campaign_Id")]
+		[ForeignKey("CampaignId")]
 		public Campaign Campaign { get; set; }
         [Required]
         public string CreatorId { get; set; }

@@ -21,7 +21,7 @@ namespace AspnetReact.Controllers
 		}
 
 		[HttpGet]
-		public IEnumerable<CampaignTag> ReadAll()
+		public IEnumerable<Tag> ReadAll()
 		{
 			return db.CampaignTags.ToList();
 		}

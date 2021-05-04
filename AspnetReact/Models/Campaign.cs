@@ -12,7 +12,7 @@ namespace AspnetReact.Models
     {
         [Key]
         public int Id { get; set; }
-        [Required]
+        [Required] //TODO Add UpdatingDate
         public DateTime CreatingDate { get; set; }
         [Required]
         public string Name { get; set; }
@@ -21,18 +21,18 @@ namespace AspnetReact.Models
         [Required]
         public float NeededSum { get; set; }
 
-		[Required]
+        [Required]
         public int CategoryId { get; set; }
-		public Category Category { get; set; }
+        public Category Category { get; set; }
 
         [Required]
         public string CreatorId { get; set; }
         [JsonIgnore]
-        public ApplicationUser Creator { get; set; }
+        public virtual ApplicationUser Creator { get; set; }
 
-        public List<CampaignImage> Images { get; set; }
-        public List<CampaignVideo> Videos { get; set; }
-        public List<CampaignTag> Tags { get; set; }
-        public List<Comment> Comments { get; set; }
+        public virtual List<Image> Images { get; set; } = new List<Image>();
+        public virtual List<Video> Videos { get; set; } = new List<Video>();
+        public virtual List<Tag> Tags { get; set; } = new List<Tag>();
+        public virtual List<Comment> Comments { get; set; } = new List<Comment>();
     }
 }

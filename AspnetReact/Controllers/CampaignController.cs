@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using System.ComponentModel.DataAnnotations;
 
 namespace AspnetReact.Controllers
 {
@@ -19,10 +20,8 @@ namespace AspnetReact.Controllers
 	public class CampaignController : Controller
 	{
 		ApplicationDbContext db;
-		private readonly UserManager<ApplicationUser> userManager;
-		public CampaignController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
+		public CampaignController(ApplicationDbContext context)
 		{
-			this.userManager = userManager;
 			this.db = context;
 		}
 
@@ -44,39 +43,69 @@ namespace AspnetReact.Controllers
 				.Include(x => x.Category)
 				.Include(x => x.Tags)
 				.FirstOrDefault(x => x.Id == id);
-;
+
 			return foundedItem;
 		}
 
 		[HttpPost]
-		public JsonResult Create(Campaign obj)
+		public async Task<JsonResult> Create([FromForm]CampaignViewModel campaignVM, [FromForm]List<IFormFile> images)
 		{
 			if (!ModelState.IsValid)
-				return new JsonResult(obj) { StatusCode = StatusCodes.Status400BadRequest };
+				return new JsonResult(campaignVM) { StatusCode = StatusCodes.Status400BadRequest };
 
-			for (int i = 0; i < obj.Tags.Count; i++)
+			//TODO REFACTOR!!!
+			var campaign = new Campaign()
 			{
-				var foundTag = db.CampaignTags.FirstOrDefault(x => x.Name == obj.Tags[i].Name);
-				if (foundTag == null) foundTag = db.CampaignTags.Add(new CampaignTag() { Name = obj.Tags[i].Name }).Entity;
-				obj.Tags[i] = foundTag;
-				//obj.Tags[i] = db.CampaignTags.FindAndAddIfNotExists(obj.Tags[i], x => x.Name);
+				CreatingDate = campaignVM.CreatingDate,
+				Name = campaignVM.Name,
+				Description = campaignVM.Description,
+				NeededSum = campaignVM.NeededSum,
+				CategoryId = campaignVM.CategoryId,
+				CreatorId = campaignVM.CreatorId,
+			};
+
+			//Adding tags
+			for (int i = 0; i < campaignVM.TagNames.Count; i++)
+			{
+				var foundTag = db.CampaignTags.FirstOrDefault(x => x.Name == campaignVM.TagNames[i]);
+				if (foundTag == null) foundTag = db.CampaignTags.Add(new Tag() { Name = campaignVM.TagNames[i] }).Entity;
+				campaign.Tags.Add(foundTag);
 			}
 
-			db.Campaigns.Add(obj);
+			//Adding images and videoUrls
+			foreach (var videoUrl in campaignVM.VideoUrls)
+				campaign.Videos.Add(new Video() { Url = videoUrl });
+			foreach (var image in images)
+				campaign.Images.Add(new Image() { Url = await UploadController.Upload(image) });
+
+
+			db.Campaigns.Add(campaign);
 			db.SaveChanges();
-			return new JsonResult(obj) { StatusCode = StatusCodes.Status200OK };
+			return new JsonResult(campaign) { StatusCode = StatusCodes.Status200OK };
 		}
 
 		[HttpPut]
 		public IActionResult Update(Campaign obj)
 		{
-			if (ModelState.IsValid)
+			if (!ModelState.IsValid)
+				return new JsonResult(obj) { StatusCode = StatusCodes.Status400BadRequest };
+
+			obj.Category = null;
+			var selectedTags = new List<Tag>(obj.Tags);
+
+			db.Entry(obj).State = EntityState.Modified;
+			db.Entry(obj).Collection(x => x.Tags).Load();
+			obj.Tags = selectedTags;
+			for (int i = 0; i < obj.Tags.Count; i++)
 			{
-				db.Campaigns.Update(obj);
-				db.SaveChanges();
-				return Ok(obj);
+				var foundTag = db.CampaignTags.FirstOrDefault(x => x.Name == obj.Tags[i].Name);
+				if (foundTag == null) foundTag = db.CampaignTags.Add(new Tag() { Name = obj.Tags[i].Name }).Entity;
+				obj.Tags[i] = foundTag;
 			}
-			return BadRequest(ModelState);
+
+			db.Campaigns.Update(obj);
+			db.SaveChanges();
+			return new JsonResult(obj) { StatusCode = StatusCodes.Status200OK };
 		}
 
 		[HttpDelete("{id}")]
@@ -94,5 +123,30 @@ namespace AspnetReact.Controllers
 				return NotFound();
 			}
 		}
+	}
+
+
+
+	public class CampaignViewModel
+	{
+		[Key]
+		public int Id { get; set; }
+		[Required]
+		public DateTime CreatingDate { get; set; }
+		[Required]
+		public string Name { get; set; }
+		[Required]
+		public string Description { get; set; }
+		[Required]
+		public float NeededSum { get; set; }
+
+		[Required]
+		public int CategoryId { get; set; }
+		[Required]
+		public string CreatorId { get; set; }
+
+		public List<string> ImageUrls { get; set; } = new List<string>();
+		public List<string> VideoUrls { get; set; } = new List<string>();
+		public List<string> TagNames { get; set; } = new List<string>();
 	}
 }

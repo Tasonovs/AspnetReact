@@ -7,27 +7,26 @@ using System.Threading.Tasks;
 
 namespace AspnetReact.Models
 {
-    public class CampaignMedia
+    public class Media
     {
         [Key]
         public int Id { get; set; }
         [Required]
         public string Url { get; set; }
-		//[Required]
-		//public int CampaignId { get; set; }
-		[ForeignKey("FK_CampaignMedia_Campaign_Id")]
+
+		[ForeignKey("CampaignId")]
 		public Campaign Campaign { get; set; }
 
         public int DisplayPriority { get; set; }
     }
 
 
-    public class CampaignImage : CampaignMedia
+    public class Image : Media
     {
     }
 
 
-    public class CampaignVideo : CampaignMedia
+    public class Video : Media
     {
     }
 }

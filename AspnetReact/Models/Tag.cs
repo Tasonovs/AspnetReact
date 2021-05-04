@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace AspnetReact.Models
 {
-    public class CampaignTag
+    public class Tag
     {
         [Key]
         public int Id { get; set; }
-        //[Required]
+        [Required]
         public string Name { get; set; }
 
         [JsonIgnore]
