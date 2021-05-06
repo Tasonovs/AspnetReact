@@ -29,16 +29,6 @@ export default function UpdatePage(props) {
   }, [props.match.params.id])
 
   const onSubmit = (data) => {
-    if (!data.creatingDate) data.creatingDate = new Date();
-    data.updatingDate = new Date();
-
-    const formdata = Converters.toFormData(data);
-
-    Api.authorizedRequest("PUT", Api.Routes.Campaign, formdata)
-      .then(
-        (result) => { setModalShow(true) },
-        (error) => { alert("Something went wrong, please try later") }
-      )
   }
   if (error) return <div>Ошибка: {error.message}</div>;
   else if (!isLoaded) return <div>Загрузка...</div>;

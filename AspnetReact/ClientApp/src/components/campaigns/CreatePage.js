@@ -13,50 +13,18 @@ import authService from '../api-authorization/AuthorizeService'
 
 export default function CreatePage() {
   const { register, handleSubmit, formState: { errors }, watch, control } = useForm();
-
-  const [dbCategories, setDbCategories] = useState([]);
-  const [dbTags, setDbTags] = useState([]);
+  const [dbCategories, dbTags, dbDataIsLoading, dbDataErrors] = Api.useGetCategoriesAndTags();
   const [modalShow, setModalShow] = useState(false);
 
-  useEffect(() => {
-    Api.getDataWithHook(Api.Routes.Category, setDbCategories);
-    Api.getDataWithHook(Api.Routes.Tag, setDbTags);
-  }, [])
-
   const onSubmit = async (data) => {
-    if (!data.creatingDate) data.creatingDate = new Date();
-    data.updatingDate = new Date();
-
-    const isAuthenticated = await authService.isAuthenticated;
-    const token = await authService.getAccessToken();
-    const user = await authService.getUser();
-    if (!isAuthenticated) return { error: "User is not Authenticated" };
-    data.creatorId = user.sub;
-
-
-    let formElement = document.querySelector("form");
-    let formdata = new FormData(formElement);
-
-    if (!data.creatingDate) formdata.append("creatingDate", (new Date()).toISOString());
-    formdata.append("updatingDate", (new Date()).toISOString());
-    formdata.append("creatorId", user.sub);
-
-    let options = {
-      method: 'POST',
-      body: formdata,
-      headers: {
-        Authorization: `Bearer ${token.toString()}`
-      },
-    }
-
-    fetch(Api.Routes.Campaign, options).then((res) => res.json())
+    Api.postCampaignDataFromForm(data, document.querySelector("form"))
       .then((result) => { setModalShow(true) }, (error) => { alert("Something went wrong, please try later 1") })
       .catch((error) => { alert("Something went wrong, please try later 2") });
   }
   return (
     <>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <h1>Update Campaign</h1>
+        <h1>Create Campaign</h1>
         <div className="form-group">
           <label className="form-label">Project name</label>
           <input {...register("name", { required: true })} placeholder="Project name" type="text" className="form-control" />
@@ -93,18 +61,19 @@ export default function CreatePage() {
           />
           {errors.tagNames && <small className="form-text text-danger">Field is invalid</small>}
         </div>
+        <div className="form-group">
+          <label className="form-label">Description</label>
+          <textarea rows="5" {...register("description", { required: true })} placeholder="Description" type="text" className="form-control" />
+          {errors.description && <small className="form-text text-danger">Field is invalid</small>}
+        </div>
         <MyCarousel images={watch("images")} />
         <div className="form-group">
           <div className="custom-file">
-            <input {...register("images", { min: 1, minLength: 1 })} type="file" multiple accept="image/*" className="custom-file-input" />
+            <input {...register("images", { min: 1, minLength: 1 })} type="file" multiple 
+              accept="image/*" className="custom-file-input" style={{ zIndex: 1 }} />
             <label className="custom-file-label" style={{ zIndex: 0 }}>{getFileLabel(watch("images"))}</label>
           </div>
           {errors.images && <small className="form-text text-danger">Field is invalid</small>}
-        </div>
-        <div className="form-group">
-          <label className="form-label">Description</label>
-          <textarea {...register("description", { required: true })} placeholder="Description" type="text" className="form-control" />
-          {errors.description && <small className="form-text text-danger">Field is invalid</small>}
         </div>
 
         <input type="submit" className="btn btn-primary" value="Send" />

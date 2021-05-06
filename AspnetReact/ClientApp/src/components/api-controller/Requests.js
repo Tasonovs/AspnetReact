@@ -1,3 +1,4 @@
+import React from 'react'
 import authService from '../api-authorization/AuthorizeService'
 import * as Converters from '../common/Converters'
 
@@ -5,7 +6,35 @@ export const Routes = {
     Campaign: "/api/campaign/",
     Category: "/api/category/",
     Tag: "/api/tag/",
+    Uploads: "/api/uploads/",
+    DefaultImage: "/api/uploads/default.png",
 }
+
+export function useGetRequest(url, updateParamsArray = []) {
+    const [data, setData] = React.useState([]);
+    const [isLoading, setIsLoading] = React.useState(true);
+    const [errors, setErrors] = React.useState(undefined);
+
+    React.useEffect(() => {
+        fetch(url).then(res => res.json())
+            .then(
+                (result) => { setData(result); setIsLoading(false); },
+                (error) => { setErrors(error); setIsLoading(false); }
+            );
+    }, updateParamsArray)
+
+    return [data, isLoading, errors];
+}
+
+export function useGetCategoriesAndTags() {
+    const [categories, categoriesIsLoading, categoriesErrors] = useGetRequest(Routes.Category);
+    const [tags, tagsIsLoading, tagsErrors] = useGetRequest(Routes.Tag);
+
+    return [categories, tags, categoriesIsLoading || tagsIsLoading, categoriesErrors ? categoriesErrors : tagsErrors];
+}
+
+
+
 
 export async function getDataWithHook(url, setValue, setError, setIsLoaded) {
     if (setError && setIsLoaded) {
@@ -20,24 +49,25 @@ export async function getDataWithHook(url, setValue, setError, setIsLoaded) {
     }
 }
 
-export async function authorizedRequest(method, url, data, isFormdata) {
+export async function postCampaignDataFromForm(data, formElement) {
     const isAuthenticated = await authService.isAuthenticated;
+    if (!isAuthenticated) return { error: "User is not Authenticated" };
+    
     const token = await authService.getAccessToken();
     const user = await authService.getUser();
-    return new Promise((resolve, reject) => {
-        if (!isAuthenticated) reject({ message: "User is not Authenticated" })
-        data.creatorId = user.sub;
 
-        let requestBody = isFormdata ? Converters.toFormData(data) : JSON.stringify(data);
-        fetch(url, {
-            method: method,
-            headers: {
-                //'Content-Type': 'application/json',
-                //'Content-Length': dataString.length,
-                'Credentials': 'same-origin',
-                'Authorization': `Bearer ${token.toString()}`
-            },
-            body: requestBody
-        }).then((res) => res.json())
-    })
+    let formdata = new FormData(formElement);
+    if (!data.creatingDate) formdata.append("creatingDate", (new Date()).toISOString());
+    formdata.append("updatingDate", (new Date()).toISOString());
+    formdata.append("creatorId", user.sub);
+
+    let options = {
+        method: 'POST',
+        body: formdata,
+        headers: {
+            Authorization: `Bearer ${token.toString()}`,
+        },
+    }
+
+    return fetch(Routes.Campaign, options).then((res) => res.json())
 }
