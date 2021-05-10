@@ -1,10 +1,11 @@
 import React from 'react'
 import { Carousel } from 'react-bootstrap'
+import "./MyCarousel.css"
 
 export default function MyCarousel({ images }) {
     if (!images?.length) return <div></div>
     return (
-        <Carousel style={{ backgroundColor: "#ddd" }}>
+        <Carousel>
             {images && Array.from(images).map((image, i) => {
                 return (
                     <Carousel.Item style={{ height: "400px" }} key={i}>
