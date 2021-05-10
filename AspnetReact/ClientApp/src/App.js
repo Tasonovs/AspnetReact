@@ -7,9 +7,7 @@ import { Container } from 'react-bootstrap';
 import { NavMenu } from 'components/NavMenu';
 
 import 'custom.css'
-import { Home } from 'pages/HomePage';
-import { FetchData } from 'pages/FetchData';
-import * as Campaign from 'pages/campaigns/';
+import * as Pages from 'pages/';
 
 
 export default class App extends Component {
@@ -20,15 +18,15 @@ export default class App extends Component {
       <>
         <NavMenu />
         <main>
-          <Container style={{paddingTop: "70px"}}>
-            <Route exact path='/' component={Home} />
+          <Container style={{ paddingTop: "70px" }}>
+            <Route exact path='/' component={Pages.Home} />
+            <Route path='/about' component={Pages.About} />
 
-            <Route exact path='/campaigns' component={Campaign.ReadAllPage} />
-            <Route path="/campaign/:id(\d+)" component={Campaign.ReadPage} />
-            <AuthorizeRoute path="/campaign/create" component={Campaign.CreateUpdatePage} />
-            <AuthorizeRoute path="/campaign/edit/:id(\d+)" component={Campaign.CreateUpdatePage} />
+            <Route exact path='/campaigns' component={Pages.Campaign.ReadAll} />
+            <Route path="/campaign/:id(\d+)" component={Pages.Campaign.Read} />
+            <AuthorizeRoute path="/campaign/create" component={Pages.Campaign.CreateUpdate} />
+            <AuthorizeRoute path="/campaign/edit/:id(\d+)" component={Pages.Campaign.CreateUpdate} />
 
-            <AuthorizeRoute path='/fetch-data' component={FetchData} />
             <Route path={ApplicationPaths.ApiAuthorizationPrefix} component={ApiAuthorizationRoutes} />
           </Container>
         </main>

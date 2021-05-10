@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { useForm, Controller } from "react-hook-form";
 import * as Api from "api/Requests"
 import Select from 'react-select'
@@ -10,13 +10,13 @@ import axios from 'axios'
 export default function UploadTestPage() {
     const { register, handleSubmit, watch, formState: { errors }, control } = useForm();
 
-    const [dbCategories, setDbCategories] = useState([]);
-    const [dbTags, setDbTags] = useState([]);
-    const [modalShow, setModalShow] = useState(false);
+    const [dbCategories, setDbCategories] = React.useState([]);
+    const [dbTags, setDbTags] = React.useState([]);
+    const [modalShow, setModalShow] = React.useState(false);
   
     console.log(watch("tagNames"));
 
-    useEffect(() => {
+    React.useEffect(() => {
       Api.getDataWithHook(Api.Routes.Category, setDbCategories);
       Api.getDataWithHook(Api.Routes.Tag, setDbTags);
     }, [])

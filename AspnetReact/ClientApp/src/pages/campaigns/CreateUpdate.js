@@ -7,7 +7,7 @@ import Select from 'react-select'
 import CreatableSelect from 'react-select/creatable';
 import { Converters, CenteredModal, MyCarousel, LoadingAndErrors } from 'components/common'
 
-export default function CreateUpdatePage({ match }) {
+export default function CreateUpdate({ match }) {
     const id = match?.params?.id;
     const { register, handleSubmit, formState: { errors }, watch, control, reset, setValue } = useForm();
     const [dbCategories, dbTags, dbDataIsLoading, dbDataErrors] = Api.useGetCategoriesAndTags();

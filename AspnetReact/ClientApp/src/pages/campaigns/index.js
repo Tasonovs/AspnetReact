@@ -1,8 +1,6 @@
-export {default as ReadAllPage} from './ReadAllPage'
-export {default as ReadPage} from './ReadPage'
+export {default as ReadAll} from './ReadAll'
+export {default as Read} from './Read'
 
-export {default as CreateUpdatePage} from './CreateUpdatePage'
-export {default as CreatePage} from './CreatePage'
-export {default as UpdatePage} from './UpdatePage'
+export {default as CreateUpdate} from './CreateUpdate'
 
-export {default as UploadTestPage} from './UploadTestPage'
+export {default as UploadTest} from './UploadTest'
