@@ -28,7 +28,8 @@ namespace AspnetReact.Controllers
 		{
 			if (image.Length == 0) return null;
 
-			var newFilename = Path.GetRandomFileName() + Path.GetExtension(image.FileName);
+			var newFilename = DateTime.Now.ToShortDateString() + "-" + 
+				Path.ChangeExtension(Path.GetRandomFileName(), Path.GetExtension(image.FileName));
 			var filePath = Path.Combine(Directory.GetCurrentDirectory(), "Uploads", newFilename);
 			using (var stream = System.IO.File.Create(filePath))
 				await image.CopyToAsync(stream);
@@ -41,7 +42,7 @@ namespace AspnetReact.Controllers
 			var filePath = Path.Combine(Directory.GetCurrentDirectory(), "Uploads", filename);
 			if (!System.IO.File.Exists(filePath)) return NotFound();
 			
-			return PhysicalFile(filePath, "image/"+ Path.GetExtension(filename).Remove(1,1), filename);
+			return PhysicalFile(filePath, "image/"+ Path.GetExtension(filename).Remove(0,1), filename);
 		}
 
 

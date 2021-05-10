@@ -34,6 +34,7 @@ namespace AspnetReact.Controllers
 				.Include(x => x.Tags)
 				.Include(x => x.Images)
 				.Include(x => x.Videos)
+				.Include(x => x.Creator)
 				.ToList();
 		}
 
@@ -46,16 +47,17 @@ namespace AspnetReact.Controllers
 				.Include(x => x.Tags)
 				.Include(x => x.Images)
 				.Include(x => x.Videos)
+				.Include(x => x.Creator)
 				.FirstOrDefault(x => x.Id == id);
 
 			return foundedItem;
 		}
 
 		[HttpPost]
-		public async Task<JsonResult> Create([FromForm]CampaignViewModel campaignVM, [FromForm]List<IFormFile> images)
+		public async Task<IActionResult> Create([FromForm]CampaignViewModel campaignVM)
 		{
 			if (!ModelState.IsValid)
-				return new JsonResult(campaignVM) { StatusCode = StatusCodes.Status400BadRequest };
+				return BadRequest(new { message = ModelState, campaignVM });
 
 			//TODO REFACTOR!!!
 			var campaign = new Campaign()
@@ -79,7 +81,7 @@ namespace AspnetReact.Controllers
 			//Adding images and videoUrls
 			foreach (var videoUrl in campaignVM.VideoUrls)
 				campaign.Videos.Add(new Video() { Url = videoUrl });
-			foreach (var image in images)
+			foreach (var image in campaignVM.Images)
 				campaign.Images.Add(new Image() { Url = await UploadController.Upload(image) });
 
 
@@ -89,27 +91,59 @@ namespace AspnetReact.Controllers
 		}
 
 		[HttpPut]
-		public IActionResult Update(Campaign obj)
+		public async Task<IActionResult> Update([FromForm] CampaignViewModel campaignVM)
 		{
 			if (!ModelState.IsValid)
-				return new JsonResult(obj) { StatusCode = StatusCodes.Status400BadRequest };
+				return new JsonResult(campaignVM) { StatusCode = StatusCodes.Status400BadRequest };
 
-			obj.Category = null;
-			var selectedTags = new List<Tag>(obj.Tags);
-
-			db.Entry(obj).State = EntityState.Modified;
-			db.Entry(obj).Collection(x => x.Tags).Load();
-			obj.Tags = selectedTags;
-			for (int i = 0; i < obj.Tags.Count; i++)
+			//Adding tags
+			List<Tag> requestTags = new List<Tag>();
+			foreach (var tagName in campaignVM.TagNames)
 			{
-				var foundTag = db.CampaignTags.FirstOrDefault(x => x.Name == obj.Tags[i].Name);
-				if (foundTag == null) foundTag = db.CampaignTags.Add(new Tag() { Name = obj.Tags[i].Name }).Entity;
-				obj.Tags[i] = foundTag;
+				var tagEntity = db.CampaignTags.FirstOrDefault(x => x.Name == tagName);
+				if (tagEntity == null)
+				{
+					tagEntity = db.CampaignTags.Add(new Tag() { Name = tagName }).Entity;
+					db.SaveChanges();
+				}
+				requestTags.Add(tagEntity);
 			}
 
-			db.Campaigns.Update(obj);
+			//Adding images and videoUrls
+			List<Image> requestImages = new List<Image>();
+			foreach (var image in campaignVM.Images)
+			{
+				var imageEntity = db.CampaignImages.FirstOrDefault(x => x.Url == image.FileName);
+				if (imageEntity == null)
+				{
+					imageEntity = db.CampaignImages.Add(new Image() { Url = await UploadController.Upload(image) }).Entity;
+					db.SaveChanges();
+				}
+				requestImages.Add(imageEntity);
+			}
+
+			var campaign = db.Campaigns
+				.Where(p => p.Id == campaignVM.Id)
+				.Include(x => x.Category)
+				.Include(x => x.Tags)
+				.Include(x => x.Images)
+				.Include(x => x.Videos)
+				.FirstOrDefault();
+			db.Entry(campaign).State = EntityState.Modified;
+
+			campaign.Id = campaignVM.Id;
+			campaign.CreatingDate = campaignVM.CreatingDate;
+			campaign.Name = campaignVM.Name;
+			campaign.Description = campaignVM.Description;
+			campaign.NeededSum = campaignVM.NeededSum;
+			campaign.CategoryId = campaignVM.CategoryId;
+			campaign.CreatorId = campaignVM.CreatorId;
+
+			campaign.Tags = requestTags;
+			campaign.Images = requestImages;
+
 			db.SaveChanges();
-			return new JsonResult(obj) { StatusCode = StatusCodes.Status200OK };
+			return new JsonResult(campaign) { StatusCode = StatusCodes.Status200OK };
 		}
 
 		[HttpDelete("{id}")]
@@ -149,7 +183,7 @@ namespace AspnetReact.Controllers
 		[Required]
 		public string CreatorId { get; set; }
 
-		public List<string> ImageUrls { get; set; } = new List<string>();
+		public List<IFormFile> Images { get; set; } = new List<IFormFile>();
 		public List<string> VideoUrls { get; set; } = new List<string>();
 		public List<string> TagNames { get; set; } = new List<string>();
 	}

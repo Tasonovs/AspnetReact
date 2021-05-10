@@ -27,7 +27,6 @@ namespace AspnetReact.Models
 
         [Required]
         public string CreatorId { get; set; }
-        [JsonIgnore]
         public virtual ApplicationUser Creator { get; set; }
 
         public virtual List<Image> Images { get; set; } = new List<Image>();

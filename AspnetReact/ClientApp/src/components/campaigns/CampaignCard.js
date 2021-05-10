@@ -1,42 +1,38 @@
 import React from 'react';
-import "./style.css"
+import { Button, Card } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 
-export default function CampaignCard(props) {
-    let maxTextLength = 60;
-    //TODO вынести в отдельный метод учёта GMT
-    props.campaign.creatingDate = new Date(props.campaign.creatingDate);
-    props.campaign.creatingDate.setTime(props.campaign.creatingDate.getTime() - props.campaign.creatingDate.getTimezoneOffset()*60*1000);
+export default function CampaignCard({ campaign }) {
+    let maxTextLength = 40;
+
+    //TODO should get its own method GMT
+    campaign.creatingDate = new Date(campaign.creatingDate);
+    campaign.creatingDate.setTime(campaign.creatingDate.getTime() - campaign.creatingDate.getTimezoneOffset() * 60 * 1000);
+
     return (
-        <div className="card m-1">
-            <img className="card-img-top card-image" alt="Card img"
-                src={props.campaign.images.length ? "api/uploads/"+props.campaign.images[0].url : "api/uploads/default.png"} 
-            />
-            <div className="card-body">
-                <h5 className="card-title mb-1">
-                    <a href={"/campaign/read/" + props.campaign.id}>{props.campaign.name}</a>
-                </h5>
-
-                <span className="badge badge-secondary mr-1">{props.campaign.category.name}</span>
-                {props.campaign.tags &&
-                    props.campaign.tags.map(tag => (<span key={tag.id} className="badge badge-secondary mr-1">{tag.name}</span>))}
-
-                {props.campaign.description.length <= maxTextLength &&
-                    <p className="card-text">{props.campaign.description}</p>
-                }
-                {props.campaign.description.length > maxTextLength &&
-                    <p className="card-text">{props.campaign.description.substring(0, maxTextLength)}{'...'}</p>
-                }
-            </div>
-            <div className="card-footer">
-                <small className="text-muted">{time_ago(props.campaign.creatingDate)}</small>
-            </div>
-        </div>
+        <Card style={{ width: "16rem", height: "24rem" }}>
+            <Card.Img src={campaign.images.length ? "api/uploads/" + campaign.images[0].url : "/images/default.png"}
+                style={{ width: "100%", height: "9rem", objectFit: "cover", objectPosition: "center", }} />
+            <Card.Body>
+                <Card.Title><Link to={"/campaign/" + campaign.id}>{campaign.name}</Link></Card.Title>
+                <Card.Subtitle className="text-black-50">{campaign.creator.userName}</Card.Subtitle>
+                <div className="my-1">
+                    <span className="badge badge-primary mr-1">{campaign.category.name}</span>
+                    {campaign.tags &&
+                        campaign.tags.map(tag => (<span key={tag.id} className="badge badge-secondary mr-1">{tag.name}</span>))}
+                </div>
+                <Card.Text>
+                    {campaign.description.length <= maxTextLength && campaign.description}
+                    {campaign.description.length > maxTextLength && campaign.description.substring(0, maxTextLength) + '...'}
+                </Card.Text>
+            </Card.Body>
+            <Card.Footer>{countTimeHasPassed(campaign.creatingDate)}</Card.Footer>
+        </Card>
     );
 }
 
 // https://stackoverflow.com/a/12475270
-function time_ago(time) {
-
+function countTimeHasPassed(time) {
     switch (typeof time) {
         case 'number':
             break;
@@ -63,7 +59,7 @@ function time_ago(time) {
         // [29030400, 'months', 2419200], // 60*60*24*7*4*12, 60*60*24*7*4
         // [58060800, 'Last year', 'Next year'], // 60*60*24*7*4*12*2
     ];
-    let max_seconds = time_formats[time_formats.length-1][0];
+    let max_seconds = time_formats[time_formats.length - 1][0];
     var seconds = (+new Date() - time) / 1000, token = 'ago', list_choice = 1;
 
     if (seconds >= max_seconds) return new Date(time).toLocaleDateString();

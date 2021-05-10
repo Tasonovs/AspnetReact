@@ -1,15 +1,15 @@
 import React, { Component } from 'react';
 import { Route } from 'react-router';
-import AuthorizeRoute from './components/api-authorization/AuthorizeRoute';
-import ApiAuthorizationRoutes from './components/api-authorization/ApiAuthorizationRoutes';
-import { ApplicationPaths } from './components/api-authorization/ApiAuthorizationConstants';
-import { Container } from 'reactstrap';
-import { NavMenu } from './components/NavMenu';
+import AuthorizeRoute from 'api/api-authorization/AuthorizeRoute';
+import ApiAuthorizationRoutes from 'api/api-authorization/ApiAuthorizationRoutes';
+import { ApplicationPaths } from 'api/api-authorization/ApiAuthorizationConstants';
+import { Container } from 'react-bootstrap';
+import { NavMenu } from 'components/NavMenu';
 
-import './custom.css'
-import { Home } from './components/Home';
-import { FetchData } from './components/FetchData';
-import * as Campaign from './components/campaigns/';
+import 'custom.css'
+import { Home } from 'pages/HomePage';
+import { FetchData } from 'pages/FetchData';
+import * as Campaign from 'pages/campaigns/';
 
 
 export default class App extends Component {
@@ -20,15 +20,13 @@ export default class App extends Component {
       <>
         <NavMenu />
         <main>
-          <Container>
+          <Container style={{paddingTop: "70px"}}>
             <Route exact path='/' component={Home} />
 
-            <Route path='/campaigns' component={Campaign.ReadAllPage} />
-            <Route path="/campaign/read/:id" component={Campaign.ReadPage} />
-            <AuthorizeRoute path="/campaign/create" component={Campaign.CreatePage} />
-            <AuthorizeRoute path="/campaign/edit/:id" component={Campaign.UpdatePage} />
-
-            <Route path='/upload' component={Campaign.UploadTestPage} />
+            <Route exact path='/campaigns' component={Campaign.ReadAllPage} />
+            <Route path="/campaign/:id(\d+)" component={Campaign.ReadPage} />
+            <AuthorizeRoute path="/campaign/create" component={Campaign.CreateUpdatePage} />
+            <AuthorizeRoute path="/campaign/edit/:id(\d+)" component={Campaign.CreateUpdatePage} />
 
             <AuthorizeRoute path='/fetch-data' component={FetchData} />
             <Route path={ApplicationPaths.ApiAuthorizationPrefix} component={ApiAuthorizationRoutes} />
