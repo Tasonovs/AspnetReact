@@ -6,15 +6,6 @@ using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.AspNetCore.Mvc;
-using AspnetReact.Controllers;
-using Microsoft.AspNetCore.Owin;
-using AspnetReact;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace AspnetReact.Data
 {
@@ -25,10 +16,11 @@ namespace AspnetReact.Data
         public DbSet<Video> CampaignVideos { get; set; }
         public DbSet<Tag> CampaignTags { get; set; }
         public DbSet<Category> Categories { get; set; }
+
+        public DbSet<Announcement> Announcements { get; set; }
+        public DbSet<CampaignReward> Bonuses { get; set; }
         public DbSet<Comment> Comments { get; set; }
 
-		//private readonly UserManager<ApplicationUser> userManager;
-		//private readonly SignInManager<ApplicationUser> signInManager;
 		public ApplicationDbContext(DbContextOptions options, IOptions<OperationalStoreOptions> operationalStoreOptions) 
             : base(options, operationalStoreOptions)
 		{
@@ -70,7 +62,7 @@ namespace AspnetReact.Data
                     Name = "Shooter Campaign",
                     Description = "Lorem ipsum .... description",
                     CreatingDate = DateTime.Now.AddDays(-1.5f),
-                    NeededSum = 1500.0f,
+                    RequiredAmount = 1500.0M,
 
                     CreatorId = Users.FirstOrDefault(x => x.Email == "User1@mail.com").Id,
                     Category = Categories.FirstOrDefault(x => x.Name == "Games"),
@@ -85,7 +77,7 @@ namespace AspnetReact.Data
                     Name = "RPG Campaign",
                     Description = "Lorem ipsum ... description",
                     CreatingDate = DateTime.Now.AddDays(-0.5f),
-                    NeededSum = 2000.0f,
+                    RequiredAmount = 2000.0M,
 
                     CreatorId = Users.FirstOrDefault(x => x.Email == "User1@mail.com").Id,
                     Category = Categories.FirstOrDefault(x => x.Name == "Games"),
@@ -109,6 +101,13 @@ namespace AspnetReact.Data
                     CreatorId = Users.FirstOrDefault(x => x.Email == "User1@mail.com").Id,
                     CreatingDate = DateTime.Now,
                     Body = "It's amazing. My comment)))"
+                });
+                Comments.Add(new Comment()
+                {
+                    Campaign = Campaigns.FirstOrDefault(x => x.Name == "Shooter Campaign"),
+                    CreatorId = Users.FirstOrDefault(x => x.Email == "User1@mail.com").Id,
+                    CreatingDate = DateTime.Now,
+                    Body = "My second comment!!!"
                 });
 
                 SaveChanges();

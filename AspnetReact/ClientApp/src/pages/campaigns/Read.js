@@ -13,7 +13,7 @@ export default function ReadPage(props) {
         authService.getUser().then(u => setUser(u));
     }, [user])
 
-    LoadingAndErrors(campaign, isLoading, error);
+    LoadingAndErrors({data: campaign, isLoading, error});
     return (
         <Container>
             <Row className="d-flex align-items-center">
@@ -26,7 +26,7 @@ export default function ReadPage(props) {
                 </Col>
                 <Col className="d-flex justify-content-end align-items-center p-0">
                     <FA.FaCoins />
-                    <h4>&nbsp;$__,__ <span className="text-black-50">(of $__,__ goal)</span></h4>
+                    <h4>&nbsp;$ __,__ <span className="text-black-50">(of $ __,__ goal)</span></h4>
                 </Col>
             </Row>
             <Row className="d-flex justify-content-between align-items-center">

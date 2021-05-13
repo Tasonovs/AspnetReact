@@ -21,29 +21,29 @@ namespace AspnetReact.Controllers
 			this.userManager = userManager;
 			this.signInManager = signInManager;
 
-            //InitTestData();
-        }
+			InitTestData();
+		}
 
 
 
 
-        //private async void InitTestData()
-        //{
-        //    if (!context.Users.Any())
-        //    {
-        //        for (int i = 1; i < 10; i++)
-        //        {
-        //            string userEmail = $"User{i}@mail.com";
-        //            await userManager.CreateAsync(new ApplicationUser()
-        //            {
-        //                Email = userEmail,
-        //                UserName = userEmail,
-        //                EmailConfirmed = true,
-        //            }, userEmail);
-        //        }
-        //        context.SaveChanges();
-        //    }
-        //}
+		private async void InitTestData()
+		{
+			if (!context.Users.Any())
+			{
+				for (int i = 1; i < 10; i++)
+				{
+					string userEmail = $"User{i}@mail.com";
+					await userManager.CreateAsync(new ApplicationUser()
+					{
+						Email = userEmail,
+						UserName = userEmail,
+						EmailConfirmed = true,
+					}, userEmail);
+				}
+				context.SaveChanges();
+			}
+		}
 
-    }
+	}
 }

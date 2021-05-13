@@ -34,7 +34,6 @@
     <None Include="$(SpaRoot)**" Exclude="$(SpaRoot)node_modules\**" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Data\Migrations\" />
     <Folder Include="Uploads\" />
     <Folder Include="Uploads\" />
   </ItemGroup>
