@@ -20,7 +20,7 @@ namespace AspnetReact.Controllers
 			db = context;
 		}
 
-		[HttpGet]
+		[HttpGet] //TODO Get Campaigns with Limit, Offset, SortType
 		public IEnumerable<Category> ReadAll()
 		{
 			return db.Categories.ToList();

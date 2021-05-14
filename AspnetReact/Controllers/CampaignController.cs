@@ -19,7 +19,7 @@ namespace AspnetReact.Controllers
 	[Route("api/[controller]")]
 	public class CampaignController : Controller
 	{
-		ApplicationDbContext db;
+		private readonly ApplicationDbContext db;
 		public CampaignController(ApplicationDbContext context)
 		{
 			this.db = context;

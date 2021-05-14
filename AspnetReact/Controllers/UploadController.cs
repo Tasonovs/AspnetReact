@@ -28,9 +28,12 @@ namespace AspnetReact.Controllers
 		{
 			if (image.Length == 0) return null;
 
+			string uploadPath = Path.Combine(Directory.GetCurrentDirectory(), "Uploads");
+			if (!Directory.Exists(uploadPath)) Directory.CreateDirectory(uploadPath);
+
 			var newFilename = DateTime.Now.ToShortDateString() + "-" + 
 				Path.ChangeExtension(Path.GetRandomFileName(), Path.GetExtension(image.FileName));
-			var filePath = Path.Combine(Directory.GetCurrentDirectory(), "Uploads", newFilename);
+			var filePath = Path.Combine(uploadPath, newFilename);
 			using (var stream = System.IO.File.Create(filePath))
 				await image.CopyToAsync(stream);
 			return newFilename;
