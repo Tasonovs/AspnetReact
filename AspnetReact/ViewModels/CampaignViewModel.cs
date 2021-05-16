@@ -68,7 +68,7 @@ namespace AspnetReact.ViewModels
 			campaign.Description = this.Description;
 			campaign.RequiredAmount = this.RequiredAmount;
 			campaign.CategoryId = this.CategoryId;
-			campaign.CreatorId = this.CreatorId;
+			campaign.Creator = db.Users.First(x => x.Id == this.CreatorId);
 			campaign.Tags = this.Tags;
 			campaign.Images = this.Images;
 			campaign.Videos = this.Videos;
@@ -83,10 +83,11 @@ namespace AspnetReact.ViewModels
 			var collection = new List<Tag>();
 			foreach (var tagName in this.TagNames)
 			{
-				var tagEntity = db.CampaignTags.FirstOrDefault(x => x.Name == tagName);
+				var tagNameLowercase = tagName.ToLower();
+				var tagEntity = db.CampaignTags.FirstOrDefault(x => x.Name == tagNameLowercase);
 				if (tagEntity == null)
 				{
-					tagEntity = db.CampaignTags.Add(new Tag() { Name = tagName }).Entity;
+					tagEntity = db.CampaignTags.Add(new Tag() { Name = tagNameLowercase }).Entity;
 					db.SaveChanges();
 				}
 				collection.Add(tagEntity);

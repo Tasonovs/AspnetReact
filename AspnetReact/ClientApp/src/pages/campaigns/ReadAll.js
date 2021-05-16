@@ -9,7 +9,7 @@ import { Col, Container, Row } from 'react-bootstrap';
 export default function ReadAllPage() {
     const [campaigns, isLoading, error] = Api.useGetRequest("/api/campaign");
 
-    LoadingAndErrors(campaigns, isLoading, error)
+    LoadingAndErrors({data: campaigns, isLoading, error})
     return (
         <section>
             <h1 className="mb-3 text-center">Campaigns <Link to="/campaign/create">(add)</Link></h1>

@@ -32,22 +32,25 @@ namespace AspnetReact.Controllers
 			//TODO Likes count
 
 			List<Comment> comments = db.Comments
+				.Include(x => x.Creator)
 				.Where(x => x.CampaignId == campaignId).ToList();
 
 			return comments;
 		}
 
 		[HttpPost]
-		public IActionResult Create([FromForm] Comment comment)
+		public IActionResult Create([FromBody] Comment comment)
 		{
-			if (!ModelState.IsValid)
-				return BadRequest(new JsonResult(new { comment, message = ModelState.Values }));
+			if (string.IsNullOrEmpty(comment.Body))
+				return BadRequest(new JsonResult(new { comment, message = "Comment is empty" }));
+
+			comment.CreatingDate = DateTime.Now;
+			comment.Creator = db.Users.FirstOrDefault(x => x.UserName == User.Identity.Name);
 
 			db.Comments.Add(comment);
 			db.SaveChanges();
 
 			return new JsonResult(comment) { StatusCode = StatusCodes.Status200OK };
 		}
-
 	}
 }

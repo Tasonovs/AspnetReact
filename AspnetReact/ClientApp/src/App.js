@@ -27,6 +27,9 @@ export default class App extends Component {
             <AuthorizeRoute path="/campaign/create" component={Pages.Campaign.CreateUpdate} />
             <AuthorizeRoute path="/campaign/edit/:id(\d+)" component={Pages.Campaign.CreateUpdate} />
 
+            <AuthorizeRoute path="/profile/campaigns" component={Pages.Profile.Campaigns} />
+            <AuthorizeRoute path="/profile/bonuses" component={Pages.Profile.Bonuses} />
+
             <Route path={ApplicationPaths.ApiAuthorizationPrefix} component={ApiAuthorizationRoutes} />
           </Container>
         </main>

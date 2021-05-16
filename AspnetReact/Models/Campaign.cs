@@ -28,14 +28,18 @@ namespace AspnetReact.Models
         public Category Category { get; set; }
 
         [Required]
-        public string CreatorId { get; set; }
-        public virtual ApplicationUser Creator { get; set; }
+        //public string CreatorId { get; set; }
+        //TODO ????? why it starts to add two FK?
+        public ApplicationUser Creator { get; set; }
 
-		public List<Rating> Ratings { get; set; }
+		public List<Image> Images { get; set; } = new List<Image>();
+        public List<Video> Videos { get; set; } = new List<Video>();
+        public List<Tag> Tags { get; set; } = new List<Tag>();
 
-		public virtual List<Image> Images { get; set; } = new List<Image>();
-        public virtual List<Video> Videos { get; set; } = new List<Video>();
-        public virtual List<Tag> Tags { get; set; } = new List<Tag>();
-        public virtual List<Comment> Comments { get; set; } = new List<Comment>();
+        public List<Bonus> Bonuses { get; set; } = new List<Bonus>();
+        public List<CampaignMoneyTransfer> MoneyTransfers { get; set; } = new List<CampaignMoneyTransfer>();
+
+        public List<Comment> Comments { get; set; } = new List<Comment>();
+		public List<Rating> Ratings { get; set; } = new List<Rating>();
     }
 }

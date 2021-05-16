@@ -2,8 +2,10 @@ import React from 'react';
 import authService from 'api/api-authorization/AuthorizeService'
 import { Button, Card, Col, Container, Row, Tab, Tabs } from 'react-bootstrap';
 import * as Api from "api/Requests"
-import { LoadingAndErrors, MyCarousel } from "components/common"
+import { LoadingAndErrors, MyCarousel, Converters } from "components/common"
 import * as FA from 'react-icons/fa'
+import { Link } from 'react-router-dom';
+import CommentForm from "components/campaigns/CommentForm"
 
 export default function ReadPage(props) {
     const [campaign, isLoading, error] = Api.useGetRequest(Api.Routes.Campaign + props.match.params.id, [props.match.params.id]);
@@ -11,14 +13,14 @@ export default function ReadPage(props) {
 
     React.useEffect(() => {
         authService.getUser().then(u => setUser(u));
-    }, [user])
+    }, [])
 
     LoadingAndErrors({data: campaign, isLoading, error});
     return (
         <Container>
-            <Row className="d-flex align-items-center">
+            <Row className="d-flex align-items-center justify-content-between">
                 <h1>{campaign.name}</h1>
-                {(campaign?.creatorId === user?.sub) && <Button href={"/campaign/edit/" + props.match.params.id}>Edit</Button>}
+                {(campaign?.creatorId === user?.sub) && <Button as={Link} to={"/campaign/edit/" + props.match.params.id}>Edit</Button>}
             </Row>
             <Row className="d-flex align-items-center">
                 <Col md="auto" className="p-0">
@@ -26,7 +28,7 @@ export default function ReadPage(props) {
                 </Col>
                 <Col className="d-flex justify-content-end align-items-center p-0">
                     <FA.FaCoins />
-                    <h4>&nbsp;$ __,__ <span className="text-black-50">(of $ __,__ goal)</span></h4>
+                    <h4>&nbsp;$ __,__ <span className="text-black-50">(of $ {campaign.requiredAmount} goal)</span></h4>
                 </Col>
             </Row>
             <Row className="d-flex justify-content-between align-items-center">
@@ -48,16 +50,14 @@ export default function ReadPage(props) {
                     <Card>
                         <Card.Header>Comments</Card.Header>
                         <Card.Body>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Omnis et enim aperiam inventore, similique necessitatibus neque non! Doloribus, modi sapiente laboriosam aperiam fugiat laborum. Sequi mollitia, necessitatibus quae sint natus.</p>
-                            <small className="text-muted">Posted by Anonymous on 3/1/21</small>
-                            <hr />
-                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Omnis et enim aperiam inventore, similique necessitatibus neque non! Doloribus, modi sapiente laboriosam aperiam fugiat laborum. Sequi mollitia, necessitatibus quae sint natus.</p>
-                            <small className="text-muted">Posted by Anonymous on 3/1/21</small>
-                            <hr />
-                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Omnis et enim aperiam inventore, similique necessitatibus neque non! Doloribus, modi sapiente laboriosam aperiam fugiat laborum. Sequi mollitia, necessitatibus quae sint natus.</p>
-                            <small className="text-muted">Posted by Anonymous on 3/1/21</small>
-                            <hr />
-                            <a className="btn btn-success" href="#!">Leave a Review</a>
+                            <CommentForm campaignId={campaign.id} />
+                            {campaign.comments?.slice(0).reverse().map(comment => (
+                                <div key={comment.id}>
+                                    <p>{comment.body}</p>
+                                    <small className="text-muted">Posted by {comment.creator.userName} on {Converters.toTimeHasPassed(comment.creatingDate)}</small>
+                                    <hr />
+                                </div>
+                            ))}
                         </Card.Body>
                     </Card>
                 </Tab>

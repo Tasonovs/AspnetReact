@@ -25,7 +25,7 @@ namespace AspnetReact.Data
             : base(options, operationalStoreOptions)
 		{
 			Database.EnsureCreated();
-			//InitTestData();
+			InitTestData();
 		}
 
 
@@ -40,17 +40,19 @@ namespace AspnetReact.Data
 				Categories.Add(new Category() { Name = "Films" });
 				Categories.Add(new Category() { Name = "Music" });
 				Categories.Add(new Category() { Name = "Books" });
+				Categories.Add(new Category() { Name = "Arts" });
+				Categories.Add(new Category() { Name = "Devices" });
 
 				SaveChanges();
 			}
 			if (!CampaignTags.Any())
 			{
-				CampaignTags.Add(new Tag() { Name = "Shooter" });
-				CampaignTags.Add(new Tag() { Name = "RPG" });
-				CampaignTags.Add(new Tag() { Name = "Comedy" });
-				CampaignTags.Add(new Tag() { Name = "History" });
-				CampaignTags.Add(new Tag() { Name = "3D" });
-				CampaignTags.Add(new Tag() { Name = "2D" });
+				CampaignTags.Add(new Tag() { Name = "shooter" });
+				CampaignTags.Add(new Tag() { Name = "rpg" });
+				CampaignTags.Add(new Tag() { Name = "comedy" });
+				CampaignTags.Add(new Tag() { Name = "history" });
+				CampaignTags.Add(new Tag() { Name = "3d" });
+				CampaignTags.Add(new Tag() { Name = "2d" });
 
 				SaveChanges();
 			}
@@ -63,7 +65,7 @@ namespace AspnetReact.Data
 					CreatingDate = DateTime.Now.AddDays(-1.5f),
 					RequiredAmount = 1500.0M,
 
-					CreatorId = Users.FirstOrDefault(x => x.Email == "User1@mail.com").Id,
+					Creator = Users.FirstOrDefault(x => x.Email == "User1@mail.com"),
 					Category = Categories.FirstOrDefault(x => x.Name == "Games"),
 					Tags = new List<Tag>()
 					{
@@ -78,7 +80,7 @@ namespace AspnetReact.Data
 					CreatingDate = DateTime.Now.AddDays(-0.5f),
 					RequiredAmount = 2000.0M,
 
-					CreatorId = Users.FirstOrDefault(x => x.Email == "User1@mail.com").Id,
+					Creator = Users.FirstOrDefault(x => x.Email == "User1@mail.com"),
 					Category = Categories.FirstOrDefault(x => x.Name == "Games"),
 					Tags = new List<Tag>()
 					{

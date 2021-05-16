@@ -33,7 +33,6 @@ export class NavMenu extends Component {
             <Nav className="container-fluid">
               <Nav.Link as={Link} to="/">Home</Nav.Link>
               <Nav.Link as={Link} to="/campaigns">Campaigns</Nav.Link>
-              <Nav.Link as={Link} to="/fetch-data">Weather</Nav.Link>
 
               <Nav.Item className="ml-auto"></Nav.Item>
 

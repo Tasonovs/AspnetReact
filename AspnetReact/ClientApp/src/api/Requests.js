@@ -4,9 +4,11 @@ import * as Converters from 'components/common/Converters'
 
 export const Routes = {
     Campaign: "/api/campaign/",
+    CampaignByUserId: "/api/campaign/user/",
     Category: "/api/category/",
     Tag: "/api/tag/",
     Uploads: "/api/uploads/",
+    Comments: "/api/comment/",
 }
 
 export function useGetRequest(url, updateParamsArray = []) {
@@ -32,22 +34,6 @@ export function useGetCategoriesAndTags() {
     return [categories, tags, categoriesIsLoading || tagsIsLoading, categoriesError ? categoriesError : tagsError];
 }
 
-
-
-
-export async function getDataWithHook(url, setValue, setError, setIsLoaded) {
-    if (setError && setIsLoaded) {
-        await fetch(url).then(res => res.json())
-            .then(
-                (result) => { console.log(result); setValue(result); setIsLoaded(true); },
-                (error) => { setError(error); setIsLoaded(true); }
-            );
-    } else {
-        await fetch(url).then(res => res.json())
-            .then((result) => { setValue(result) }, (error) => { console.error(error) });
-    }
-}
-
 export async function sendCampaignDataFromForm(method, formElement, data, id) {
     const isAuthenticated = await authService.isAuthenticated;
     if (!isAuthenticated) return { error: "User is not Authenticated" };
@@ -70,4 +56,21 @@ export async function sendCampaignDataFromForm(method, formElement, data, id) {
     }
 
     return fetch(Routes.Campaign, options).then((res) => res.json())
+}
+export async function secureFetch(method, url, data) {
+    const isAuthenticated = await authService.isAuthenticated;
+    if (!isAuthenticated) return { error: "User is not Authenticated" };
+    
+    const token = await authService.getAccessToken();
+
+    let options = {
+        method: method,
+        body: JSON.stringify(data),
+        'Content-Type': "application/json, charset=utf-8",
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    }
+
+    return fetch(url, options).then((res) => res.json())
 }

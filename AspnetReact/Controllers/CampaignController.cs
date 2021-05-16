@@ -35,6 +35,9 @@ namespace AspnetReact.Controllers
 				.Include(x => x.Images)
 				.Include(x => x.Videos)
 				.Include(x => x.Creator)
+				.OrderByDescending(x => x.CreatingDate)
+				.Skip(0)
+				.Take(10)
 				.ToList();
 		}
 
@@ -48,9 +51,22 @@ namespace AspnetReact.Controllers
 				.Include(x => x.Images)
 				.Include(x => x.Videos)
 				.Include(x => x.Creator)
+				.Include(x => x.Comments).ThenInclude(x => x.Creator)
 				.FirstOrDefault(x => x.Id == id);
 
 			return foundedItem;
+		}
+
+		[AllowAnonymous]
+		[HttpGet("user/{userId}")]
+		public List<Campaign> ReadByUserId(string userId)
+		{
+			return db.Campaigns
+				.Include(x => x.Category)
+				.Include(x => x.Tags)
+				.Include(x => x.Creator)
+				.Where(x => x.Creator.Id == userId)
+				.ToList();
 		}
 
 		[HttpPost]
@@ -64,7 +80,7 @@ namespace AspnetReact.Controllers
 			return new JsonResult(campaign) { StatusCode = StatusCodes.Status200OK };
 		}
 
-		[HttpPut] //TODO Read UserId and compare to Campaign.CreatorId
+		[HttpPut] //TODO Read UserId and compare to Campaign.OwnerId
 		public async Task<IActionResult> Update([FromForm] CampaignViewModel campaignVM)
 		{
 			if (!ModelState.IsValid)

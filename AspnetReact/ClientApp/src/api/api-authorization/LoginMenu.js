@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import { NavItem, NavLink } from 'react-bootstrap';
+import { Nav, NavDropdown, NavItem, NavLink } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import authService from './AuthorizeService';
 import { ApplicationPaths } from './ApiAuthorizationConstants';
@@ -46,7 +46,11 @@ export class LoginMenu extends Component {
 
     authenticatedView(userName, profilePath, logoutPath) {
         return (<Fragment>
-            <NavLink as={Link} to={profilePath}>Profile</NavLink>
+            <NavDropdown title="Profile" id="basic-nav-dropdown">
+                <NavDropdown.Item as={Link} to={profilePath}>Edit profile</NavDropdown.Item>
+                <NavDropdown.Item as={Link} to="/profile/campaigns">My campaigns</NavDropdown.Item>
+                <NavDropdown.Item as={Link} to="/profile/bonuses">My bonuses</NavDropdown.Item>
+            </NavDropdown>
             <NavLink as={Link} to={logoutPath}>Logout</NavLink>
         </Fragment>);
 

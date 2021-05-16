@@ -20,6 +20,7 @@ namespace AspnetReact.Models
         public Campaign Campaign { get; set; }
         [Required]
         public string CreatorId { get; set; }
+        public ApplicationUser Creator { get; set; }
 
         public List<CommentLike> Likes { get; set; } = new List<CommentLike>();
     }

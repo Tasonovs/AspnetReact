@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace AspnetReact.Models
 {
-	public class CampaignMoneyTransfer
+	public class CampaignMoneyTransfer //TODO Rename to UserBonuses
 	{
 		[Key]
 		public int Id { get; set; }

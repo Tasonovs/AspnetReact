@@ -6,10 +6,13 @@ import { useForm, Controller } from "react-hook-form";
 import Select from 'react-select'
 import CreatableSelect from 'react-select/creatable';
 import { Converters, CenteredModal, MyCarousel, LoadingAndErrors } from 'components/common'
+import { Button, Container, Row } from 'react-bootstrap';
+import { FaEye } from 'react-icons/fa';
+import { Link } from 'react-router-dom'
 
 export default function CreateUpdate({ match }) {
     const id = match?.params?.id;
-    const { register, handleSubmit, formState: { errors }, watch, control, reset, setValue } = useForm();
+    const { register, handleSubmit, formState: { errors }, watch, control, setValue } = useForm();
     const [dbCategories, dbTags, dbDataIsLoading, dbDataErrors] = Api.useGetCategoriesAndTags();
 
     let [campaign, isLoading, error] = (id !== undefined && id !== null) 
@@ -17,21 +20,24 @@ export default function CreateUpdate({ match }) {
         : [undefined, false, null];
     const [modalShow, setModalShow] = React.useState(false);
     
-    React.useEffect(async () => {
-        if (!campaign.id) return;
-        setValue("name", campaign.name);
-        setValue("neededSum", campaign.neededSum);
-        setValue("categoryId", campaign.categoryId);
-        setValue("description", campaign.description);
-        setValue("tagNames", campaign.tags?.map(v => { return v.name }));
-
-        if (!campaign.images) return;
-        let dataTransfer = new DataTransfer();
-        for (let i in campaign.images) {
-            let file = await getFileFromUrl(Api.Routes.Uploads + campaign.images[i].url, campaign.images[i].url)
-            dataTransfer.items.add(file);
+    React.useEffect(() => {
+        async function post() {
+            if (!campaign.id) return;
+            setValue("name", campaign.name);
+            setValue("neededSum", campaign.neededSum);
+            setValue("categoryId", campaign.categoryId);
+            setValue("description", campaign.description);
+            setValue("tagNames", campaign.tags?.map(v => { return v.name }));
+    
+            if (!campaign.images) return;
+            let dataTransfer = new DataTransfer();
+            for (let i in campaign.images) {
+                let file = await getFileFromUrl(Api.Routes.Uploads + campaign.images[i].url, campaign.images[i].url);
+                dataTransfer.items.add(file);
+            }
+            setValue("images", dataTransfer.files);
         }
-        setValue("images", dataTransfer.files);
+        post();
     }, [campaign])
 
 
@@ -43,11 +49,14 @@ export default function CreateUpdate({ match }) {
                 (error) => { alert("Something went wrong, please try later\nError: " + error) }
             );
     }
-    LoadingAndErrors({campaign, isLoading, error});
+    LoadingAndErrors({data: campaign, isLoading, error});
     return (
-        <>
+        <Container>
             <form onSubmit={handleSubmit(onSubmit)}>
-                <h1>{id !== undefined ? "Update" : "Create"} Campaign</h1>
+                <Row className="d-flex align-items-center justify-content-between">
+                    <h1>{id !== undefined ? "Update" : "Create"} Campaign</h1>
+                    {id !== undefined && <Button as={Link} to={"/campaign/" + campaign.id}><FaEye /></Button>}
+                </Row>
                 <div className="form-group">
                     <label className="form-label">Project name</label>
                     <input {...register("name", { required: true })} placeholder="Project name" type="text" className="form-control" />
@@ -86,7 +95,7 @@ export default function CreateUpdate({ match }) {
                 </div>
                 <div className="form-group">
                     <label className="form-label">Description</label>
-                    <textarea rows="5" {...register("description", { required: true })} placeholder="Description" type="text" className="form-control" />
+                    <textarea rows={10} {...register("description", { required: true })} placeholder="Description" className="form-control" />
                     {errors.description && <small className="form-text text-danger">Field is invalid</small>}
                 </div>
                 <MyCarousel images={watch("images")} />
@@ -104,7 +113,7 @@ export default function CreateUpdate({ match }) {
                 <CenteredModal show={modalShow} onHide={() => setModalShow(false)} backdrop="static" keyboard={false}
                     title="Great" body="The campaign was loaded successfully" />
             </form>
-        </>
+        </Container>
     );
 }
 
