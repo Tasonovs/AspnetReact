@@ -26,19 +26,27 @@ namespace AspnetReact.Controllers
 		}
 
 		[AllowAnonymous]
-		[HttpGet]
-		public IEnumerable<Campaign> ReadAll()
+		[HttpGet("page/{pageNum}")]
+		public async Task<IActionResult> ReadByPageNum(int pageNum)
 		{
-			return db.Campaigns
+			int itemsPerPage = 12;
+			int campaignsCount = db.Campaigns.Count();
+			int maxPageNum = (int)Math.Ceiling((double)(campaignsCount / itemsPerPage));
+			if (pageNum < 1) return NotFound();
+			if (pageNum > maxPageNum) return NotFound();
+
+			var campaigns = db.Campaigns
 				.Include(x => x.Category)
 				.Include(x => x.Tags)
 				.Include(x => x.Images)
 				.Include(x => x.Videos)
 				.Include(x => x.Creator)
 				.OrderByDescending(x => x.CreatingDate)
-				.Skip(0)
-				.Take(10)
+				.Skip(itemsPerPage * (pageNum - 1))
+				.Take(itemsPerPage)
 				.ToList();
+
+			return new JsonResult(new { campaigns, campaignsCount, maxPageNum }) { StatusCode = StatusCodes.Status200OK }; 
 		}
 
 		[AllowAnonymous]
@@ -46,13 +54,14 @@ namespace AspnetReact.Controllers
 		public Campaign Read(int id)
 		{
 			Campaign foundedItem = db.Campaigns
+				.Where(x => x.Id == id)
 				.Include(x => x.Category)
 				.Include(x => x.Tags)
 				.Include(x => x.Images)
 				.Include(x => x.Videos)
 				.Include(x => x.Creator)
 				.Include(x => x.Comments).ThenInclude(x => x.Creator)
-				.FirstOrDefault(x => x.Id == id);
+				.FirstOrDefault();
 
 			return foundedItem;
 		}
@@ -92,7 +101,7 @@ namespace AspnetReact.Controllers
 				.Include(x => x.Tags)
 				.Include(x => x.Images)
 				.Include(x => x.Videos)
-				.FirstOrDefault();
+				.First();
 
 			campaign = await campaignVM.ConvertAndSaveToDb(db, campaign);
 

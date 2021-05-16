@@ -22,10 +22,10 @@ export default function CreateUpdate({ match }) {
     
     React.useEffect(() => {
         async function post() {
-            if (!campaign.id) return;
+            if (!campaign?.id) return;
             setValue("name", campaign.name);
-            setValue("neededSum", campaign.neededSum);
-            setValue("categoryId", campaign.categoryId);
+            setValue("requiredAmount", campaign.requiredAmount);
+            setValue("categoryId", campaign.category.id);
             setValue("description", campaign.description);
             setValue("tagNames", campaign.tags?.map(v => { return v.name }));
     
@@ -35,7 +35,7 @@ export default function CreateUpdate({ match }) {
                 let file = await getFileFromUrl(Api.Routes.Uploads + campaign.images[i].url, campaign.images[i].url);
                 dataTransfer.items.add(file);
             }
-            setValue("images", dataTransfer.files);
+            setValue("imageFiles", dataTransfer.files);
         }
         post();
     }, [campaign])
@@ -64,8 +64,8 @@ export default function CreateUpdate({ match }) {
                 </div>
                 <div className="form-group">
                     <label className="form-label">Needed sum</label>
-                    <input {...register("neededSum", { required: true })} placeholder="Needed sum" type="number" className="form-control" />
-                    {errors.neededSum && <small className="form-text text-danger">Field is invalid</small>}
+                    <input {...register("requiredAmount", { required: true })} placeholder="Needed sum" type="number" className="form-control" />
+                    {errors.requiredAmount && <small className="form-text text-danger">Field is invalid</small>}
                 </div>
                 <div className="form-group">
                     <label className="form-label">Category</label>
@@ -98,14 +98,14 @@ export default function CreateUpdate({ match }) {
                     <textarea rows={10} {...register("description", { required: true })} placeholder="Description" className="form-control" />
                     {errors.description && <small className="form-text text-danger">Field is invalid</small>}
                 </div>
-                <MyCarousel images={watch("images")} />
+                <MyCarousel images={watch("imageFiles")} />
                 <div className="form-group">
                     <div className="custom-file">
-                        <input {...register("images")} type="file" multiple
+                        <input {...register("imageFiles")} type="file" multiple
                             accept="image/*" className="custom-file-input" style={{ zIndex: 1 }} />
-                        <label className="custom-file-label" style={{ zIndex: 0 }}>{getFileLabel(watch("images"))}</label>
+                        <label className="custom-file-label" style={{ zIndex: 0 }}>{getFileLabel(watch("imageFiles"))}</label>
                     </div>
-                    {errors.images && <small className="form-text text-danger">Field is invalid</small>}
+                    {errors.imageFiles && <small className="form-text text-danger">Field is invalid</small>}
                 </div>
 
                 <input type="submit" className="btn btn-primary" value="Send" />

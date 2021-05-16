@@ -22,7 +22,7 @@ export default class App extends Component {
             <Route exact path='/' component={Pages.Home} />
             <Route path='/about' component={Pages.About} />
 
-            <Route exact path='/campaigns' component={Pages.Campaign.ReadAll} />
+            <Route exact path='/campaigns/page/:pageNum(\d+)' component={Pages.Campaign.ReadAll} />
             <Route path="/campaign/:id(\d+)" component={Pages.Campaign.Read} />
             <AuthorizeRoute path="/campaign/create" component={Pages.Campaign.CreateUpdate} />
             <AuthorizeRoute path="/campaign/edit/:id(\d+)" component={Pages.Campaign.CreateUpdate} />

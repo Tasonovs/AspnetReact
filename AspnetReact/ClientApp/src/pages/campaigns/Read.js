@@ -3,7 +3,7 @@ import authService from 'api/api-authorization/AuthorizeService'
 import { Button, Card, Col, Container, Row, Tab, Tabs } from 'react-bootstrap';
 import * as Api from "api/Requests"
 import { LoadingAndErrors, MyCarousel, Converters } from "components/common"
-import * as FA from 'react-icons/fa'
+import { FaCoins, FaEdit } from 'react-icons/fa'
 import { Link } from 'react-router-dom';
 import CommentForm from "components/campaigns/CommentForm"
 
@@ -15,19 +15,19 @@ export default function ReadPage(props) {
         authService.getUser().then(u => setUser(u));
     }, [])
 
-    LoadingAndErrors({data: campaign, isLoading, error});
     return (
-        <Container>
+        <LoadingAndErrors data={campaign} isLoading={isLoading} error={error}>
             <Row className="d-flex align-items-center justify-content-between">
                 <h1>{campaign.name}</h1>
-                {(campaign?.creatorId === user?.sub) && <Button as={Link} to={"/campaign/edit/" + props.match.params.id}>Edit</Button>}
+                {(campaign?.creator?.id === user?.sub) && 
+                    <Button as={Link} to={"/campaign/edit/" + props.match.params.id}><FaEdit /> Edit</Button>}
             </Row>
             <Row className="d-flex align-items-center">
                 <Col md="auto" className="p-0">
                     <h4><span className="text-warning">★ ★ ★ ★ ☆</span> 4.0&nbsp;</h4>
                 </Col>
                 <Col className="d-flex justify-content-end align-items-center p-0">
-                    <FA.FaCoins />
+                    <FaCoins />
                     <h4>&nbsp;$ __,__ <span className="text-black-50">(of $ {campaign.requiredAmount} goal)</span></h4>
                 </Col>
             </Row>
@@ -62,6 +62,6 @@ export default function ReadPage(props) {
                     </Card>
                 </Tab>
             </Tabs>
-        </Container>
+        </LoadingAndErrors>
     );
 }

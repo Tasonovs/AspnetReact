@@ -26,13 +26,13 @@ export class NavMenu extends Component {
   render() {
     return (
       <header>
-        <Navbar className="box-shadow" variant="dark" bg="dark" expand="lg" fixed="top">
-          <Navbar.Brand style={{borderBottom:"solid 2px"}} href="/"><FaReact /> AspnetReact</Navbar.Brand>
+        <Navbar className="box-shadow" variant="light" bg="light" expand="sm" fixed="top">
+          <Navbar.Brand href="/"><FaReact /> AspnetReact</Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="container-fluid">
               <Nav.Link as={Link} to="/">Home</Nav.Link>
-              <Nav.Link as={Link} to="/campaigns">Campaigns</Nav.Link>
+              <Nav.Link as={Link} to="/campaigns/page/1">Campaigns</Nav.Link>
 
               <Nav.Item className="ml-auto"></Nav.Item>
 

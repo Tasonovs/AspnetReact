@@ -8,12 +8,10 @@ html {
     }
 }
 
-a.navbar-brand {
-    white-space: normal;
-    text-align: center;
-    word-break: break-all;
+.navbar {
+    box-shadow: 0 .25rem .75rem rgba(0, 0, 0, 0.2);
 }
 
-.box-shadow {
-    box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
+.navbar-brand {
+    border-bottom: solid 2px;
 }

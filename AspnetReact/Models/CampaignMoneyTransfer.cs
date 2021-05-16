@@ -6,23 +6,21 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace AspnetReact.Models
 {
-	public class CampaignMoneyTransfer //TODO Rename to UserBonuses
+	public class UserBonuses
 	{
 		[Key]
 		public int Id { get; set; }
 
 		[Required]
-		public DateTime TransferDateTime { get; set; }
+		public DateTime TransferDate { get; set; }
 
 		[Required]
-		public int CampaignId { get; set; }
-		public Campaign Campaign { get; set; }
+		public Bonus Bonus { get; set; }
 
 		[Required]
-		public string UserId { get; set; }
 		public ApplicationUser User { get; set; }
 
 		[Required]
-		public Decimal AmountOfMoney { get; set; }
+		public float AmountOfMoney { get; set; }
 	}
 }

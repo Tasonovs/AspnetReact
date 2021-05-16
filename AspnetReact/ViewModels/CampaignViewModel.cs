@@ -26,7 +26,7 @@ namespace AspnetReact.ViewModels
 		[Required]
 		public string Description { get; set; }
 		[Required]
-		public Decimal RequiredAmount { get; set; }
+		public float RequiredAmount { get; set; }
 
 		[Required]
 		public int CategoryId { get; set; }
@@ -67,7 +67,7 @@ namespace AspnetReact.ViewModels
 			campaign.Name = this.Name;
 			campaign.Description = this.Description;
 			campaign.RequiredAmount = this.RequiredAmount;
-			campaign.CategoryId = this.CategoryId;
+			campaign.Category = db.Categories.First(x => x.Id == this.CategoryId);
 			campaign.Creator = db.Users.First(x => x.Id == this.CreatorId);
 			campaign.Tags = this.Tags;
 			campaign.Images = this.Images;

@@ -63,7 +63,7 @@ namespace AspnetReact.Data
 					Name = "Shooter Campaign",
 					Description = "Lorem ipsum .... description",
 					CreatingDate = DateTime.Now.AddDays(-1.5f),
-					RequiredAmount = 1500.0M,
+					RequiredAmount = 1500.0f,
 
 					Creator = Users.FirstOrDefault(x => x.Email == "User1@mail.com"),
 					Category = Categories.FirstOrDefault(x => x.Name == "Games"),
@@ -78,7 +78,7 @@ namespace AspnetReact.Data
 					Name = "RPG Campaign",
 					Description = "Lorem ipsum ... description",
 					CreatingDate = DateTime.Now.AddDays(-0.5f),
-					RequiredAmount = 2000.0M,
+					RequiredAmount = 2000.0f,
 
 					Creator = Users.FirstOrDefault(x => x.Email == "User1@mail.com"),
 					Category = Categories.FirstOrDefault(x => x.Name == "Games"),

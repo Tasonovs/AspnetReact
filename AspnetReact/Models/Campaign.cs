@@ -21,10 +21,9 @@ namespace AspnetReact.Models
         [Required]
         public string Description { get; set; }
         [Required]
-        public Decimal RequiredAmount { get; set; }
+        public float RequiredAmount { get; set; }
 
         [Required]
-        public int CategoryId { get; set; }
         public Category Category { get; set; }
 
         [Required]
@@ -37,7 +36,7 @@ namespace AspnetReact.Models
         public List<Tag> Tags { get; set; } = new List<Tag>();
 
         public List<Bonus> Bonuses { get; set; } = new List<Bonus>();
-        public List<CampaignMoneyTransfer> MoneyTransfers { get; set; } = new List<CampaignMoneyTransfer>();
+        public List<UserBonuses> MoneyTransfers { get; set; } = new List<UserBonuses>(); //Need for count money
 
         public List<Comment> Comments { get; set; } = new List<Comment>();
 		public List<Rating> Ratings { get; set; } = new List<Rating>();

@@ -33,7 +33,9 @@ namespace AspnetReact.Controllers
 
 			List<Comment> comments = db.Comments
 				.Include(x => x.Creator)
-				.Where(x => x.CampaignId == campaignId).ToList();
+				.Where(x => x.CampaignId == campaignId)
+				.OrderByDescending(x => x.CreatingDate)
+				.ToList();
 
 			return comments;
 		}

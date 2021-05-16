@@ -11,7 +11,7 @@ export default function CampaignCard({ campaign }) {
     campaign.creatingDate.setTime(campaign.creatingDate.getTime() - campaign.creatingDate.getTimezoneOffset() * 60 * 1000);
 
     return (
-        <Card style={{ width: "16rem", height: "24rem" }}>
+        <Card className="m-1" style={{ width: "16rem", height: "24rem" }}>
             <Card.Img src={campaign.images.length ? "api/uploads/" + campaign.images[0].url : "/images/default.png"}
                 style={{ width: "100%", height: "9rem", objectFit: "cover", objectPosition: "center", }} />
             <Card.Body>
