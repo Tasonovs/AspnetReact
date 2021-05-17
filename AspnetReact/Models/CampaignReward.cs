@@ -17,7 +17,7 @@ namespace AspnetReact.Models
 		public string Description { get; set; }
 
 		[Required]
-		public Decimal Cost { get; set; }
+		public float Cost { get; set; }
 
 		[ForeignKey("CampaignId")]
 		public Campaign Campaign { get; set; }

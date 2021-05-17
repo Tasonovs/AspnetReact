@@ -27,17 +27,17 @@ namespace AspnetReact.Controllers
 
 		[AllowAnonymous]
 		[HttpGet("{campaignId}")]
-		public IEnumerable<Comment> ReadByCampaignId(int campaignId)
+		public IActionResult ReadByCampaignId(int campaignId)
 		{
 			//TODO Likes count
 
 			List<Comment> comments = db.Comments
-				.Include(x => x.Creator)
 				.Where(x => x.CampaignId == campaignId)
+				.Include(x => x.Creator)
 				.OrderByDescending(x => x.CreatingDate)
 				.ToList();
 
-			return comments;
+			return new JsonResult(new { comments }) { StatusCode = StatusCodes.Status200OK };
 		}
 
 		[HttpPost]

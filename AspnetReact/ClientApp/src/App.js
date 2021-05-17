@@ -1,17 +1,15 @@
 import React, { Component } from 'react';
+import { Container } from 'react-bootstrap';
 import { Route } from 'react-router';
+
 import AuthorizeRoute from 'api/api-authorization/AuthorizeRoute';
 import ApiAuthorizationRoutes from 'api/api-authorization/ApiAuthorizationRoutes';
 import { ApplicationPaths } from 'api/api-authorization/ApiAuthorizationConstants';
-import { Container } from 'react-bootstrap';
+
 import { NavMenu } from 'components/NavMenu';
-
-import 'custom.css'
 import * as Pages from 'pages/';
-
-
 export default class App extends Component {
-  static displayName = App.name;
+  static displayName = document.getElementsByTagName("h1")[0] ? document.getElementsByTagName("h1")[0].innerHTML : App.name;
 
   render() {
     return (

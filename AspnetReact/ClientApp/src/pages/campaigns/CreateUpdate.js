@@ -7,7 +7,7 @@ import Select from 'react-select'
 import CreatableSelect from 'react-select/creatable';
 import { Converters, CenteredModal, MyCarousel, LoadingAndErrors } from 'components/common'
 import { Button, Container, Row } from 'react-bootstrap';
-import { FaEye } from 'react-icons/fa';
+import { FaEye, FaQuestion, FaQuestionCircle } from 'react-icons/fa';
 import { Link } from 'react-router-dom'
 
 export default function CreateUpdate({ match }) {
@@ -49,9 +49,8 @@ export default function CreateUpdate({ match }) {
                 (error) => { alert("Something went wrong, please try later\nError: " + error) }
             );
     }
-    LoadingAndErrors({data: campaign, isLoading, error});
     return (
-        <Container>
+        <LoadingAndErrors data={campaign} isLoading={isLoading} error={error}>
             <form onSubmit={handleSubmit(onSubmit)}>
                 <Row className="d-flex align-items-center justify-content-between">
                     <h1>{id !== undefined ? "Update" : "Create"} Campaign</h1>
@@ -94,7 +93,7 @@ export default function CreateUpdate({ match }) {
                     {errors.tagNames && <small className="form-text text-danger">Field is invalid</small>}
                 </div>
                 <div className="form-group">
-                    <label className="form-label">Description</label>
+                    <label className="form-label">Description <a href="https://www.markdownguide.org/basic-syntax/" target="_blank" rel="noopener noreferrer"><FaQuestionCircle/></a></label>
                     <textarea rows={10} {...register("description", { required: true })} placeholder="Description" className="form-control" />
                     {errors.description && <small className="form-text text-danger">Field is invalid</small>}
                 </div>
@@ -113,7 +112,7 @@ export default function CreateUpdate({ match }) {
                 <CenteredModal show={modalShow} onHide={() => setModalShow(false)} backdrop="static" keyboard={false}
                     title="Great" body="The campaign was loaded successfully" />
             </form>
-        </Container>
+        </LoadingAndErrors>
     );
 }
 

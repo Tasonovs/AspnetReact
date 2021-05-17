@@ -13,7 +13,6 @@ namespace AspnetReact.Models
 
 		[Required]
 		public int CampaignId { get; set; }
-		public Campaign Campaign { get; set; }
 
 		[Required]
 		public string UserId { get; set; }

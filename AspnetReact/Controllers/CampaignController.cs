@@ -27,7 +27,7 @@ namespace AspnetReact.Controllers
 
 		[AllowAnonymous]
 		[HttpGet("page/{pageNum}")]
-		public async Task<IActionResult> ReadByPageNum(int pageNum)
+		public IActionResult ReadByPageNum(int pageNum)
 		{
 			int itemsPerPage = 12;
 			int campaignsCount = db.Campaigns.Count();
@@ -41,19 +41,20 @@ namespace AspnetReact.Controllers
 				.Include(x => x.Images)
 				.Include(x => x.Videos)
 				.Include(x => x.Creator)
+				.Include(x => x.Ratings)
 				.OrderByDescending(x => x.CreatingDate)
 				.Skip(itemsPerPage * (pageNum - 1))
 				.Take(itemsPerPage)
 				.ToList();
 
-			return new JsonResult(new { campaigns, campaignsCount, maxPageNum }) { StatusCode = StatusCodes.Status200OK }; 
+			return new JsonResult(new { campaigns, campaignsCount, maxPageNum }) { StatusCode = StatusCodes.Status200OK };
 		}
 
 		[AllowAnonymous]
 		[HttpGet("{id}")]
 		public Campaign Read(int id)
 		{
-			Campaign foundedItem = db.Campaigns
+			Campaign campaign = db.Campaigns
 				.Where(x => x.Id == id)
 				.Include(x => x.Category)
 				.Include(x => x.Tags)
@@ -61,9 +62,10 @@ namespace AspnetReact.Controllers
 				.Include(x => x.Videos)
 				.Include(x => x.Creator)
 				.Include(x => x.Comments).ThenInclude(x => x.Creator)
+				.Include(x => x.Ratings)
 				.FirstOrDefault();
 
-			return foundedItem;
+			return campaign;
 		}
 
 		[AllowAnonymous]

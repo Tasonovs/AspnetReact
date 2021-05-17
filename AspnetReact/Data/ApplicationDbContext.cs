@@ -17,9 +17,13 @@ namespace AspnetReact.Data
         public DbSet<Tag> CampaignTags { get; set; }
         public DbSet<Category> Categories { get; set; }
 
+		public DbSet<Rating> Ratings { get; set; }
         public DbSet<Announcement> Announcements { get; set; }
-        public DbSet<CampaignReward> Bonuses { get; set; }
-        public DbSet<Comment> Comments { get; set; }
+		public DbSet<Bonus> Bonuses { get; set; }
+		public DbSet<UserBonus> UserBonuses { get; set; }
+
+		public DbSet<Comment> Comments { get; set; }
+		public DbSet<CommentLike> CommentLikes { get; set; }
 
 		public ApplicationDbContext(DbContextOptions options, IOptions<OperationalStoreOptions> operationalStoreOptions) 
             : base(options, operationalStoreOptions)

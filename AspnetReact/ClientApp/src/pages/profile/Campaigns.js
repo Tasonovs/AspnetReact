@@ -65,16 +65,14 @@ export default function Campaigns() {
     ];
 
 
-
-    LoadingAndErrors({ data: campaigns, isLoading, error });
     return (
-        <Container>
+        <LoadingAndErrors data={campaigns} isLoading={isLoading} error={error}>
             <Row className="d-flex align-items-center justify-content-between">
                 <h1>My campaigns</h1>
                 <Button as={Link} to="/campaign/create/"><FaEdit /> Create</Button>
             </Row>
 
             <BootstrapTable keyField='id' data={campaigns} columns={columns} filter={filterFactory()} />
-        </Container>
+        </LoadingAndErrors>
     )
 }

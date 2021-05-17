@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace AspnetReact.Models
 {
-	public class UserBonuses
+	public class UserBonus
 	{
 		[Key]
 		public int Id { get; set; }

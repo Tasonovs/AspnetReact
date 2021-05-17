@@ -27,8 +27,7 @@ namespace AspnetReact.Models
         public Category Category { get; set; }
 
         [Required]
-        //public string CreatorId { get; set; }
-        //TODO ????? why it starts to add two FK?
+        //public string CreatorId { get; set; } //?why it starts to add two same FK?
         public ApplicationUser Creator { get; set; }
 
 		public List<Image> Images { get; set; } = new List<Image>();
@@ -36,9 +35,14 @@ namespace AspnetReact.Models
         public List<Tag> Tags { get; set; } = new List<Tag>();
 
         public List<Bonus> Bonuses { get; set; } = new List<Bonus>();
-        public List<UserBonuses> MoneyTransfers { get; set; } = new List<UserBonuses>(); //Need for count money
+        public List<UserBonus> UserBonuses { get; set; } = new List<UserBonus>(); //Need for count money
 
         public List<Comment> Comments { get; set; } = new List<Comment>();
 		public List<Rating> Ratings { get; set; } = new List<Rating>();
+
+        [NotMapped]
+        public bool IsUserHasRatedThis { get; set; }
+        [NotMapped]
+        public float UserBonusesMoneySum { get; set; }
     }
 }

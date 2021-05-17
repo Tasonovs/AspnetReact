@@ -15,7 +15,7 @@ namespace AspnetReact.Models
         [Required]
         public string Description { get; set; }
         [Required]
-        public Decimal RequiredAmount { get; set; }
+        public float RequiredAmount { get; set; }
 
         [Required]
         public int CampaignId { get; set; }

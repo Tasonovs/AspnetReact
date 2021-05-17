@@ -32,6 +32,7 @@ export class NavMenu extends Component {
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="container-fluid">
               <Nav.Link as={Link} to="/">Home</Nav.Link>
+              <Nav.Link as={Link} to="/about">About</Nav.Link>
               <Nav.Link as={Link} to="/campaigns/page/1">Campaigns</Nav.Link>
 
               <Nav.Item className="ml-auto"></Nav.Item>
