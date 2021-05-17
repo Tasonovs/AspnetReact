@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import * as Api from "api/Requests"
 
 import CampaignCard from "components/campaigns/CampaignCard"
 import { LoadingAndErrors } from 'components/common'
 import { Link } from 'react-router-dom';
-import { Button, Col, Container, Row } from 'react-bootstrap';
+import { Button, Container, Row } from 'react-bootstrap';
 import { FaArrowLeft, FaArrowRight, FaPlus } from 'react-icons/fa';
 
 export default function ReadAllPage(props) {

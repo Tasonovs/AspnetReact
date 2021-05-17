@@ -113,17 +113,12 @@ namespace AspnetReact.Controllers
 		[HttpDelete("{id}")]
 		public IActionResult Delete(int id)
 		{
-			Campaign foundedItem = db.Campaigns.FirstOrDefault(x => x.Id == id);
-			if (foundedItem != null)
-			{
-				db.Campaigns.Remove(foundedItem);
-				db.SaveChanges();
-				return Ok($"'{foundedItem.Name}' {foundedItem.GetType()} was deleted");
-			}
-			else
-			{
-				return NotFound();
-			}
+			Campaign campaign = db.Campaigns.FirstOrDefault(x => x.Id == id);
+			if (campaign == null) return NotFound();
+
+			db.Campaigns.Remove(campaign);
+			db.SaveChanges();
+			return new JsonResult(new { message = $"'{campaign.Name}' {campaign.GetType()} was deleted" }) { StatusCode = StatusCodes.Status200OK };
 		}
 	}
 }

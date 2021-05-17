@@ -57,13 +57,24 @@ export default function Campaigns() {
                     <div>
                         <Button className="mx-1" size="sm" as={Link} to={"/campaign/" + i} variant="primary"><FaEye /></Button>
                         <Button className="mx-1" size="sm" as={Link} to={"/campaign/edit/" + i} variant="success"><FaPen /></Button>
-                        <Button className="mx-1" size="sm" as={Link} to="" variant="danger"><FaTrash /></Button>
+                        <Button className="mx-1" size="sm" onClick={() => handleDeleteClick(i)} variant="danger"><FaTrash /></Button>
                     </div>
                 )
             },
         }
     ];
 
+    async function handleDeleteClick(campaignId) {
+        // eslint-disable-next-line no-restricted-globals
+        let isConfirm = confirm("Do you want to delete the campaign?");
+        if (isConfirm) {
+            Api.secureFetch("DELETE", Api.Routes.Campaign + campaignId)
+                .then(
+                    (result) => { window.location.reload() },
+                    (error) => { alert("Something went wrong, please try later\nError: " + error) }
+                );
+        }
+    }
 
     return (
         <LoadingAndErrors data={campaigns} isLoading={isLoading} error={error}>

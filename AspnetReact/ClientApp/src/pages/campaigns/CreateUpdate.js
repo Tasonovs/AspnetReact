@@ -63,7 +63,7 @@ export default function CreateUpdate({ match }) {
                 </div>
                 <div className="form-group">
                     <label className="form-label">Needed sum</label>
-                    <input {...register("requiredAmount", { required: true })} placeholder="Needed sum" type="number" className="form-control" />
+                    <input {...register("requiredAmount", { required: true })} placeholder="Needed sum" type="number" step="0.01" className="form-control" />
                     {errors.requiredAmount && <small className="form-text text-danger">Field is invalid</small>}
                 </div>
                 <div className="form-group">

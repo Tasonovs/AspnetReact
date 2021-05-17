@@ -43,9 +43,10 @@ export async function sendCampaignDataFromForm(method, formElement, data, id) {
 
     let formdata = new FormData(formElement);
     if (id !== undefined) formdata.append("id", id);
+    formdata.append("creatorId", user.sub);
+
     if (!data.creatingDate) formdata.append("creatingDate", (new Date()).toISOString());
     formdata.append("updatingDate", (new Date()).toISOString());
-    formdata.append("creatorId", user.sub);
 
     let options = {
         method: method,
@@ -57,7 +58,7 @@ export async function sendCampaignDataFromForm(method, formElement, data, id) {
 
     return fetch(Routes.Campaign, options).then((res) => res.json())
 }
-export async function secureFetch(method, url, data) {
+export async function secureFetch(method, url, data = {}) {
     const isAuthenticated = await authService.isAuthenticated;
     if (!isAuthenticated) return { error: "User is not Authenticated" };
     

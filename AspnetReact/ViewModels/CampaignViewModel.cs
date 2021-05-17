@@ -54,6 +54,7 @@ namespace AspnetReact.ViewModels
 			{
 				campaign = new Campaign();
 				db.Entry(campaign).State = EntityState.Added;
+				campaign.CreatingDate = DateTime.Now;
 			}
 			else
 			{
@@ -61,8 +62,7 @@ namespace AspnetReact.ViewModels
 				campaign.Id = (int)this.Id;
 			}
 
-			campaign.CreatingDate = this.CreatingDate;
-			campaign.UpdatingDate = this.UpdatingDate;
+			campaign.UpdatingDate = DateTime.Now;
 			campaign.EndDate = this.EndDate;
 			campaign.Name = this.Name;
 			campaign.Description = this.Description;

@@ -49,7 +49,7 @@ export class LoginMenu extends Component {
             <NavDropdown title="Profile" id="basic-nav-dropdown">
                 <NavDropdown.Item as={Link} to={profilePath}>Edit profile</NavDropdown.Item>
                 <NavDropdown.Item as={Link} to="/profile/campaigns">My campaigns</NavDropdown.Item>
-                <NavDropdown.Item as={Link} to="/profile/bonuses">My bonuses</NavDropdown.Item>
+                {/* <NavDropdown.Item as={Link} to="/profile/bonuses">My bonuses</NavDropdown.Item> */}
             </NavDropdown>
             <NavLink as={Link} to={logoutPath}>Logout</NavLink>
         </Fragment>);
